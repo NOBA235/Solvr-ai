@@ -3,16 +3,10 @@ import { createClient } from '@/lib/supabase/server'
 import { PLANS } from '@/lib/stripe/plans'
 import { timeAgo, SUBJECT_CONFIG } from '@/lib/utils'
 import SoVLogo from '@/components/SoVLogo'
+import SolvePage from '@/app/dashboard/solve/page'
 
 // Production SVG Icons Component
 const Icons = {
-  Solve: ({ className = "w-6 h-6" }) => (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-      <path d="M2 17l10 5 10-5"/>
-      <path d="M2 12l10 5 10-5"/>
-    </svg>
-  ),
   Lab: ({ className = "w-6 h-6" }) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
       <path d="M9 3h6v4l4 10H5L9 7V3z"/>
@@ -74,14 +68,6 @@ export default async function DashboardPage() {
 
   const QUICK_ACTIONS = [
     { 
-      href: '/dashboard/solve', 
-      icon: Icons.Solve, 
-      label: 'Solve a Problem', 
-      desc: 'Upload or type any STEM problem',
-      highlight: true,
-      primary: true
-    },
-    { 
       href: '/dashboard/lab', 
       icon: Icons.Lab, 
       label: 'Virtual Lab', 
@@ -107,23 +93,13 @@ export default async function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
-      <div className="p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
-        {/* Header - Improved mobile layout */}
-        <div className="mb-6 sm:mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <SoVLogo className="h-8 w-8 sm:h-10 sm:w-10 flex-shrink-0" />
-            <div>
-              <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-gray-900">
-                Solvr AI
-              </h1>
-              <p className="text-sm text-gray-600 mt-0.5">Free AI Solver</p>
-            </div>
-          </div>
-          <p className="text-base sm:text-lg text-gray-700 font-medium max-w-2xl">
-            Get instant, easy-to-follow solutions for STEM subjects
-          </p>
-        </div>
+      {/* Main Solve Component - Full width at top */}
+      <div className="border-b border-gray-200 shadow-sm">
+        <SolvePage />
+      </div>
 
+      {/* Dashboard Content - Below the solver */}
+      <div className="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
         {/* Usage Card - Enhanced mobile design */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 sm:p-6 mb-6 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
@@ -194,20 +170,18 @@ export default async function DashboardPage() {
           )}
         </div>
 
-        {/* Quick Actions - Improved mobile grid and visual hierarchy */}
+        {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3 px-1">
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-            {QUICK_ACTIONS.map(({ href, icon: Icon, label, desc, locked, badge, primary, accent }) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {QUICK_ACTIONS.map(({ href, icon: Icon, label, desc, locked, badge, accent }) => (
               <Link 
                 key={href} 
                 href={href}
                 className={`group relative bg-white border rounded-xl sm:rounded-2xl p-4 sm:p-5 transition-all duration-200 hover:shadow-lg ${
-                  primary
-                    ? 'border-blue-200 hover:border-blue-300 bg-gradient-to-br from-blue-50 to-white'
-                    : accent
+                  accent
                     ? 'border-amber-200 hover:border-amber-300 bg-gradient-to-br from-amber-50 to-white'
                     : locked
                     ? 'border-gray-200 opacity-75 hover:opacity-85'
@@ -221,9 +195,7 @@ export default async function DashboardPage() {
                 )}
                 
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4 ${
-                  primary
-                    ? 'bg-blue-500 text-white'
-                    : accent
+                  accent
                     ? 'bg-amber-500 text-white'
                     : 'bg-gray-100 text-gray-600 group-hover:bg-gray-200'
                 }`}>
@@ -231,7 +203,7 @@ export default async function DashboardPage() {
                 </div>
                 
                 <h3 className={`text-sm sm:text-base font-semibold mb-1 ${
-                  primary ? 'text-blue-900' : accent ? 'text-amber-900' : 'text-gray-900'
+                  accent ? 'text-amber-900' : 'text-gray-900'
                 }`}>
                   {label}
                 </h3>
@@ -241,7 +213,7 @@ export default async function DashboardPage() {
                 </p>
                 
                 <div className={`inline-flex items-center gap-1 text-xs font-medium mt-3 ${
-                  primary ? 'text-blue-600' : accent ? 'text-amber-600' : 'text-gray-500'
+                  accent ? 'text-amber-600' : 'text-gray-500'
                 }`}>
                   {locked ? 'Upgrade to access' : 'Get started'}
                   <Icons.ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
@@ -251,13 +223,13 @@ export default async function DashboardPage() {
           </div>
         </div>
 
-        {/* Recent Activity - Improved two column layout */}
+        {/* Recent Activity - Two column layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
           {/* Recent Problems */}
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900">Recent Problems</h2>
-              {recentProblems?.length > 0 && (
+              {(recentProblems?.length ?? 0) > 0 && (
                 <Link 
                   href="/dashboard/history" 
                   className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
@@ -269,20 +241,15 @@ export default async function DashboardPage() {
             </div>
             
             <div className="space-y-2 sm:space-y-3">
-              {!recentProblems?.length && (
+              {(recentProblems?.length ?? 0) === 0 && (
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 text-center">
                   <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
                     <Icons.Empty className="w-8 h-8 text-gray-400" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">No problems yet</h3>
-                  <p className="text-sm text-gray-600 mb-4">Start solving problems and track your progress</p>
-                  <Link 
-                    href="/dashboard/solve" 
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                  >
-                    Solve your first problem
-                    <Icons.ArrowRight className="w-4 h-4" />
-                  </Link>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Start solving problems above and track your progress here
+                  </p>
                 </div>
               )}
               
@@ -331,7 +298,7 @@ export default async function DashboardPage() {
           <div>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-bold text-gray-900">Lab Experiments</h2>
-              {recentExps?.length > 0 && (
+              {(recentExps?.length ?? 0) > 0 && (
                 <Link 
                   href="/dashboard/lab" 
                   className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700"
@@ -343,7 +310,7 @@ export default async function DashboardPage() {
             </div>
             
             <div className="space-y-2 sm:space-y-3">
-              {!recentExps?.length && (
+              {(recentExps?.length ?? 0) === 0 && (
                 <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 text-center">
                   <div className="w-16 h-16 mx-auto mb-4 bg-purple-100 rounded-full flex items-center justify-center">
                     <Icons.Lab className="w-8 h-8 text-purple-500" />

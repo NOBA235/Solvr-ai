@@ -23,8 +23,7 @@ import {
   MdSchool, 
   MdScience, 
   MdBiotech, 
-  MdCalculate,
-  MdOutlineChemistry 
+  MdCalculate 
 } from 'react-icons/md'
 import { GiAbacus, GiMicroscope, GiChemicalDrop } from 'react-icons/gi'
 import MathRenderer from '@/components/MathRenderer'

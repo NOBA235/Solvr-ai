@@ -6,16 +6,31 @@ import type { Profile } from '@/types'
 import { PLANS } from '@/lib/stripe/plans'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import SoVLogo from '@/components/SoVLogo';
+// Fix: Use correct icon names that exist in react-icons/fi
+import { 
+  FiHome, 
+  FiBook,   
+  FiClock, 
+  FiSettings, 
+  FiDatabase,
+  FiLogOut,
+  FiMenu,
+  FiX,
+  FiStar,
+  FiChevronRight
+} from 'react-icons/fi'
+import { IoFlaskOutline } from 'react-icons/io5'
+import { GiChemicalDrop } from 'react-icons/gi' 
+import { MdScience } from 'react-icons/md'
 
-const NAV: { href: string; icon: string; label: string; adminOnly?: boolean }[] = [
-  { href: '/dashboard',       icon: '🏠', label: 'Home'       },
-  { href: '/dashboard/solve', icon: '🔬', label: 'Solve'      },
-  { href: '/dashboard/lab',   icon: '⚗️', label: 'Virtual Lab' },
-  { href: '/dashboard/history',icon: '📋', label: 'History'   },
-  { href: '/dashboard/settings',icon: '⚙️',label: 'Settings'  },
-  { href: '/dashboard/admin',   icon: '🧠', label: 'Knowledge Base', adminOnly: true },
+const NAV: { href: string; icon: any; label: string; adminOnly?: boolean }[] = [
+  { href: '/dashboard',       icon: FiHome,      label: 'Home'       },
+  { href: '/dashboard/solve', icon: MdScience,   label: 'Solve'      },
+  { href: '/dashboard/history',icon: FiClock,    label: 'History'   },
+  { href: '/dashboard/settings',icon: FiSettings,label: 'Settings'  },
+  { href: '/dashboard/admin',   icon: FiDatabase, label: 'Knowledge Base', adminOnly: true },
 ]
+
 
 export default function DashboardSidebar({ profile }: { profile: Profile | null }) {
   const pathname = usePathname()
@@ -29,7 +44,6 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
   const used = profile?.problems_used || 0
   const pct = limit === -1 ? 100 : Math.min(100, Math.round((used / limit) * 100))
 
-  // Check if mobile on mount and resize
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024)
@@ -39,12 +53,10 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileOpen(false)
   }, [pathname])
 
-  // Prevent body scroll when mobile menu open
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = 'hidden'
@@ -65,18 +77,22 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
-      {/* Brand */}
-      <div className="p-5 border-b border-line">
+      <div className="p-5 border-b border-gray-200">
         <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileOpen(false)}>
-          <span className="text-xl">🔬</span>
-          <span className="text-base font-extrabold text-primary group-hover:text-primary/80 transition-colors">Solvr AI</span>
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+            <FiBook className="w-4 h-4 text-white" />
+          </div>
+          <div>
+            <span className="text-base font-extrabold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
+              Solvr AI
+            </span>
+            <p className="text-[10px] text-gray-400 font-mono -mt-0.5">← back to home</p>
+          </div>
         </Link>
-        <p className="text-[10px] text-muted font-mono mt-1 ml-0.5">← back to home</p>
       </div>
 
-      {/* Nav */}
-      <nav className="flex-1 p-3 space-y-0.5 overflow-y-auto">
-        {NAV.filter(n => !n.adminOnly || profile?.role === 'admin').map(({ href, icon, label }) => {
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+        {NAV.filter(n => !n.adminOnly || profile?.role === 'admin').map(({ href, icon: Icon, label }) => {
           const active = pathname === href || (href !== '/dashboard' && pathname.startsWith(href))
           const locked = href === '/dashboard/lab' && profile?.plan === 'free'
           return (
@@ -84,71 +100,82 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
               key={href} 
               href={href}
               onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all relative ${
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all relative group ${
                 active
-                  ? 'bg-primary/10 text-primary'
-                  : 'text-muted hover:text-ink hover:bg-line/30'
-              } ${locked ? 'opacity-50' : ''}`}>
-              <span>{icon}</span>
+                  ? 'bg-blue-50 text-blue-700'
+                  : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
+              } ${locked ? 'opacity-50 cursor-not-allowed' : ''}`}>
+              <Icon className={`w-4.5 h-4.5 ${active ? 'text-blue-600' : 'text-gray-400'}`} />
               <span>{label}</span>
               {locked && (
-                <span className="ml-auto text-[9px] bg-amber-100 text-amber-700 font-mono px-1.5 py-0.5 rounded border border-amber-200">
-                  PRO
+                <span className="ml-auto text-[9px] font-mono bg-gradient-to-r from-amber-400 to-orange-500 text-white px-1.5 py-0.5 rounded-full flex items-center gap-0.5">
+                  <FiStar className="w-2.5 h-2.5" /> PRO
                 </span>
+              )}
+              {active && (
+                <motion.div
+                  layoutId="active-nav"
+                  className="absolute left-0 w-1 h-6 bg-blue-600 rounded-r-full"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                />
               )}
             </Link>
           )
         })}
       </nav>
 
-      {/* Usage */}
-      <div className="p-4 border-t border-line">
-        <div className="bg-paper rounded-xl p-3 mb-3 border border-line">
+      <div className="p-4 border-t border-gray-200 bg-gray-50/30">
+        <div className="bg-white rounded-xl p-3 mb-3 border border-gray-200 shadow-sm">
           <div className="flex justify-between items-center mb-2">
-            <span className="text-xs font-mono text-muted">Problems</span>
-            <span className="text-xs font-mono text-ink/70">
+            <span className="text-xs font-mono text-gray-500">Problems</span>
+            <span className="text-xs font-mono font-semibold text-gray-700">
               {used}/{limit === -1 ? '∞' : limit}
             </span>
           </div>
-          <div className="w-full bg-line rounded-full h-1.5 overflow-hidden">
-            <div 
-              className="h-full rounded-full transition-all duration-300"
+          <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+            <motion.div 
+              className="h-full rounded-full"
               style={{ 
                 width: `${pct}%`, 
-                background: pct > 80 ? '#DC2626' : '#2563EB' 
-              }} 
+                background: pct > 80 ? 'linear-gradient(90deg, #EF4444, #DC2626)' : 'linear-gradient(90deg, #2563EB, #1D4ED8)'
+              }}
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ duration: 0.5 }}
             />
           </div>
           {profile?.plan === 'free' && (
             <Link 
               href="/pricing" 
               onClick={() => setMobileOpen(false)}
-              className="block text-center text-xs text-primary font-mono mt-2 hover:underline"
+              className="flex items-center justify-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-700 mt-2 transition-colors group"
             >
-              Upgrade plan →
+              Upgrade plan
+              <FiChevronRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
             </Link>
           )}
         </div>
 
-        {/* User */}
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-sm font-bold text-white flex-shrink-0">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white shadow-sm flex-shrink-0">
             {profile?.username?.[0]?.toUpperCase() || '?'}
           </div>
           <div className="flex-1 min-w-0">
-            <div className="text-xs font-semibold truncate text-ink">
+            <div className="text-sm font-semibold truncate text-gray-900">
               {profile?.username || 'User'}
             </div>
-            <div className="text-[10px] font-mono text-muted capitalize">
+            <div className="text-[10px] font-mono text-gray-500 capitalize">
               {profile?.plan || 'free'} plan
             </div>
           </div>
           <button 
             onClick={logout} 
             title="Sign out"
-            className="text-muted hover:text-ink transition-colors text-lg p-1 hover:bg-line/30 rounded-lg"
+            className="text-gray-400 hover:text-gray-600 transition-all p-2 hover:bg-gray-100 rounded-lg"
           >
-            ↩
+            <FiLogOut className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -157,70 +184,44 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
 
   return (
     <>
-      {/* Mobile Hamburger Button */}
       {isMobile && (
-        <button
+        <motion.button
           onClick={() => setMobileOpen(!mobileOpen)}
-          className="fixed top-0 left-0 z-50 m-4 p-2.5 bg-white border border-line rounded-xl shadow-lg hover:shadow-xl transition-all lg:hidden"
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+          className="fixed top-4 left-4 z-50 p-3 bg-white border border-gray-200 rounded-xl shadow-lg lg:hidden"
+          whileTap={{ scale: 0.95 }}
         >
-          <svg 
-            className="w-5 h-5 text-ink" 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
-          >
-            {mobileOpen ? (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            ) : (
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            )}
-          </svg>
-        </button>
+          {mobileOpen ? <FiX className="w-5 h-5" /> : <FiMenu className="w-5 h-5" />}
+        </motion.button>
       )}
 
-      {/* Desktop Sidebar */}
       {!isMobile && (
-        <aside className="w-64 bg-white border-r border-line flex flex-col h-full flex-shrink-0 shadow-sm">
+        <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full flex-shrink-0 shadow-sm">
           {sidebarContent}
         </aside>
       )}
 
-      {/* Mobile Overlay & Drawer */}
       <AnimatePresence>
         {isMobile && mobileOpen && (
           <>
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.2 }}
               onClick={() => setMobileOpen(false)}
-              className="fixed inset-0 bg-ink/20 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
             />
-
-            {/* Drawer */}
             <motion.aside
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
               transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-              className="fixed top-0 left-0 bottom-0 w-72 bg-white border-r border-line flex flex-col z-50 shadow-2xl lg:hidden"
+              className="fixed top-0 left-0 bottom-0 w-72 bg-white border-r border-gray-200 flex flex-col z-50 shadow-2xl lg:hidden"
             >
-              {/* Close button inside drawer */}
               <div className="absolute top-4 right-4">
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  className="p-2 hover:bg-line/30 rounded-lg transition-colors text-muted hover:text-ink"
-                  aria-label="Close menu"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
+                <button onClick={() => setMobileOpen(false)} className="p-2 hover:bg-gray-100 rounded-lg">
+                  <FiX className="w-5 h-5" />
                 </button>
               </div>
-
               {sidebarContent}
             </motion.aside>
           </>
