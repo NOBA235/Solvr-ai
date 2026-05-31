@@ -6,6 +6,7 @@ import type { Profile } from '@/types'
 import { PLANS } from '@/lib/stripe/plans'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import SoVLogo from '@/components/SoVLogo';
 
 const NAV: { href: string; icon: string; label: string; adminOnly?: boolean }[] = [
   { href: '/dashboard',       icon: '🏠', label: 'Home'       },

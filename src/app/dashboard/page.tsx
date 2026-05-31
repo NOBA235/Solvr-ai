@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { PLANS } from '@/lib/stripe/plans'
 import { timeAgo, SUBJECT_CONFIG } from '@/lib/utils'
+import SoVLogo from '@/components/SoVLogo';
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -29,16 +30,14 @@ export default async function DashboardPage() {
   return (
     <div className="min-h-screen bg-paper">
       <div className="p-3 xs:p-4 sm:p-6 lg:p-8 max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-4 xs:mb-6 sm:mb-8 lg:mb-10">
-          <div className="text-[10px] xs:text-xs sm:text-sm text-muted font-mono mb-0.5 sm:mb-1">
-            Good to see you back 👋
-          </div>
-          <h1 className="text-xl xs:text-2xl sm:text-3xl lg:text-4xl font-display font-extrabold tracking-tight text-ink">
-            Dashboard
-          </h1>
-        </div>
-
+        {/* Header */}       
+  <SoVLogo className="h-7 w-7 sm:h-8 sm:w-8" />
+  <span className="text-base sm:text-lg text-center font-extrabold tracking-tight text-primary">
+    Solvr AI
+  </span>
+ <h1 className='bg-gray text-black font-bold text-[30px]'>Free AI Solver</h1> 
+ <p className='text-black font-[24px]'>Get instant, easy-to-follow solutions for Stem subjects.</p>           
+   
         {/* Usage card */}
         <div className="bg-white border border-line rounded-lg xs:rounded-xl sm:rounded-2xl p-3 xs:p-4 sm:p-6 mb-4 xs:mb-6 sm:mb-8">
           <div className="flex flex-col xs:flex-row items-start justify-between gap-3 xs:gap-4 sm:gap-6 mb-3 xs:mb-4">

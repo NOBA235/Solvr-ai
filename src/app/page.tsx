@@ -70,10 +70,11 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-            <span className="text-lg sm:text-xl">🔬</span>
-            <span className="text-base sm:text-lg font-extrabold tracking-tight text-primary">Solvr AI</span>
-          </Link>
-
+  <SoVLogo className="h-7 w-7 sm:h-8 sm:w-8" />
+  <span className="text-base sm:text-lg font-extrabold tracking-tight text-primary">
+    Solvr AI
+  </span>
+</Link>
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-6 text-xs text-muted font-mono">
             <Link href="/pricing" className="hover:text-ink transition-colors">Pricing</Link>
