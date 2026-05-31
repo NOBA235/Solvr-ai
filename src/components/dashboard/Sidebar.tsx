@@ -6,7 +6,6 @@ import type { Profile } from '@/types'
 import { PLANS } from '@/lib/stripe/plans'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-// Fix: Use correct icon names that exist in react-icons/fi
 import { 
   FiHome, 
   FiBook,   
@@ -26,6 +25,7 @@ import { MdScience } from 'react-icons/md'
 const NAV: { href: string; icon: any; label: string; adminOnly?: boolean }[] = [
   { href: '/dashboard',       icon: FiHome,      label: 'Home'       },
   { href: '/dashboard/solve', icon: MdScience,   label: 'Solve'      },
+  { href: '/dashboard/lab',      icon: IoFlaskOutline,  label: 'Virtual Lab'    },
   { href: '/dashboard/history',icon: FiClock,    label: 'History'   },
   { href: '/dashboard/settings',icon: FiSettings,label: 'Settings'  },
   { href: '/dashboard/admin',   icon: FiDatabase, label: 'Knowledge Base', adminOnly: true },
