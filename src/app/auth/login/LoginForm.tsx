@@ -84,7 +84,7 @@ export default function LoginForm() {
             </div>
           ))}
           <motion.button type="submit" disabled={loading}
-            className="w-full bg-violet-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-violet-700 transition-all disabled:opacity-50 mt-2"
+            className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-violet-700 transition-all disabled:opacity-50 mt-2"
             whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
             {loading ? 'Signing in...' : 'Sign in →'}
           </motion.button>

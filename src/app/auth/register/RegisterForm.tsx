@@ -101,11 +101,11 @@ export default function RegisterForm() {
               <label className="block text-[10px] font-mono tracking-widest text-gray-400 mb-1.5">{label}</label>
               <input type={type} value={(form as Record<string,string>)[key]} placeholder={placeholder} required
                 onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                className="w-full bg-white border border-gray-300 rounded-xl px-4 py-3 text-sm font-mono text-gray-900 placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors" />
+                className="w-full bg-white order border-gray-300 rounded-xl px-4 py-3 text-sm font-mono text-gray-900 placeholder-gray-400 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-colors" />
             </div>
           ))}
           <motion.button type="submit" disabled={loading}
-            className="w-full bg-violet-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-violet-700 transition-all disabled:opacity-50 mt-2"
+            className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl text-sm hover:bg-blue-500 transition-all disabled:opacity-50 mt-2"
             whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
             {loading ? 'Creating account...' : 'Create account →'}
           </motion.button>
