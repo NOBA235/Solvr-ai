@@ -1,9 +1,10 @@
+//src>app>page.tsx
 'use client'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
-
+import SoVLogo from '@/components/SoVLogo';
 const SUBJECTS = [
   { icon: '📐', name: 'Mathematics', color: '#2563EB', bgColor: 'bg-surface-blue', examples: ['Integrate ∫sin(x)dx', 'Solve quadratic ax²+bx+c=0', 'Matrix eigenvectors'] },
   { icon: '⚡', name: 'Physics', color: '#7C3AED', bgColor: 'bg-purple-50', examples: ['F = ma problem', 'Circuit analysis', 'Projectile motion'] },
