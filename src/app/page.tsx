@@ -339,8 +339,7 @@ export default function LandingPage() {
           >
             {/* Badge - Smaller */}
             <div className="inline-flex items-center gap-1.5 bg-surface-blue border border-primary/20 rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-mono text-primary mb-4 sm:mb-6">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-              Powered by Claude AI
+             AI that understand your syllabus
             </div>
 
             {/* Heading - Responsive & compact */}
