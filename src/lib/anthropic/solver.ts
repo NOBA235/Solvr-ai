@@ -154,14 +154,14 @@ export async function streamSolution({
 
 //FOR TESTING with google ai sdk
 
-
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenerativeAI, type Part } from '@google/generative-ai'
 import type { Subject } from '@/types'
 import { retrieveContext, expandQuery, buildContextBlock } from './rag'
 
+
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
 
-// ── Subject-specific system instructions ──────────────────────────────────────
+// ── Subject-specific system instructions ──
 const SUBJECT_CONTEXT: Record<Subject, string> = {
   mathematics:
     'You are a patient and encouraging maths tutor. ' +
@@ -180,7 +180,7 @@ const SUBJECT_CONTEXT: Record<Subject, string> = {
     'Use LaTeX for all equations: inline with $...$ and display with $$...$$.',
 }
 
-// ── System prompt — students NEVER see this ──────────────────────────────────
+// ── System prompt builder 
 const buildSystemPrompt = (subject: Subject, hasContext: boolean): string => `
 ${SUBJECT_CONTEXT[subject]}
 
@@ -238,7 +238,7 @@ Respond in this EXACT format:
 [One sentence: where does this come up in real life?]
 `.trim()
 
-// ── RAG-enhanced streaming solver ─────────────────────────────────────────────
+// ── RAG-enhanced streaming solver function ───────────────────────────────────
 export async function streamSolution({
   subject,
   inputText,
@@ -252,7 +252,7 @@ export async function streamSolution({
   imageMimeType?:  string
   curriculum?:     string
 }) {
-  // ── Step 1: Query expansion (for short questions) ─────────────────────────
+  // ── Step 1: Query expansion (for short questions) 
   const questionText = inputText ?? 'Problem shown in image'
   const expandedQuery = await expandQuery(questionText, subject)
 
@@ -270,12 +270,12 @@ export async function streamSolution({
 
   // ── Step 3: Initialize Gemini Model with System Instructions ───────────────
   const model = genAI.getGenerativeModel({
-    model: 'gemini-1.5-pro',
+    model: 'gemini-2.5-flash', // Correctly configured for 2.5 Flash
     systemInstruction: buildSystemPrompt(subject, usedRAG),
   })
 
-  // ── Step 4: Build the content parts payload ───────────────────────────────
-  const parts: { text?: string; inlineData?: { mimeType: string; data: string } }[] = []
+  // ── Step 4: Build the strongly typed Part array ────────────────────────────
+  const parts: Part[] = []
 
   // Add image if provided
   if (imageBase64 && imageMimeType) {

@@ -225,7 +225,7 @@ export async function POST(req: NextRequest) {
             difficulty:         metadata.difficulty ?? null,
             key_formulas:       metadata.keyFormulas ?? null,
             processing_time_ms: processingMs,
-            model_used:         'gemini-1.5-pro', // Updated model tracking
+            model_used:         'gemini-2.5-flash', 
           }),
           supabase.rpc('increment_problems_used', { user_id: user.id }),
         ])
