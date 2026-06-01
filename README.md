@@ -23,7 +23,7 @@ The free plan gives 5 problems per month with no credit card. Paid plans unlock 
 
 ## Live Demo
 
-→ **[solvr.ai](https://solvr.ai)** *(coming soon)*
+→ **[solvr.ai](https://solvr-ai-theta.vercel.app/)
 
 ---
 
@@ -38,6 +38,7 @@ The free plan gives 5 problems per month with no credit card. Paid plans unlock 
 | Vector search | Supabase pgvector |
 | AI — solutions | Anthropic Claude (claude-sonnet-4) |
 | AI — embeddings | OpenAI text-embedding-3-small |
+  gemini-api(for quick testing-optional)
 | Payments | Stripe |
 | Email | Resend |
 | Deployment | Vercel |
