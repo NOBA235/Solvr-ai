@@ -6,6 +6,7 @@ import type { Profile } from '@/types'
 import { PLANS } from '@/lib/stripe/plans'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import SoVLogo from '@/components/SoVLogo';
 import { 
   FiHome, 
   FiBook,   
@@ -77,17 +78,12 @@ export default function DashboardSidebar({ profile }: { profile: Profile | null 
     <div className="flex flex-col h-full">
       {/* Logo Section */}
       <div className="p-5 border-b border-gray-200">
-        <Link href="/" className="flex items-center gap-2 group" onClick={() => setMobileOpen(false)}>
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center flex-shrink-0">
-            <FiBook className="w-4 h-4 text-white" />
-          </div>
-          <div className="min-w-0">
-            <span className="text-base font-extrabold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent">
-              Solvr AI
-            </span>
-            <p className="text-[10px] text-gray-400 font-mono -mt-0.5 hidden sm:block">← back to home</p>
-          </div>
-        </Link>
+         <Link href="/" className="flex items-center gap-2 shrink-0">
+                    <SoVLogo className="h-7 w-7 sm:h-8 sm:w-8" />
+                    <span className="text-base sm:text-lg font-extrabold tracking-tight text-primary">
+                      Solvr AI
+                    </span>
+                  </Link>
       </div>
 
       {/* Navigation */}

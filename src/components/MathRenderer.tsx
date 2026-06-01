@@ -65,7 +65,7 @@ const components: Components = {
     </li>
   ),
 
-  // ── Code ─────────────────────────────────────────────────────────────────
+  // ── Code 
   code: ({ className, children, ...props }) => {
     const isBlock = className?.includes('language-')
     if (isBlock) {
@@ -91,17 +91,17 @@ const components: Components = {
     </pre>
   ),
 
-  // ── Block quote (used for hints/notes) ──────────────────────────────────
+  // ── Block quote (used for hints/notes)
   blockquote: ({ children }) => (
     <blockquote className="border-l-2 border-violet/50 pl-4 my-3 italic text-white/55 text-sm">
       {children}
     </blockquote>
   ),
 
-  // ── Divider ──────────────────────────────────────────────────────────────
+  // ── Divider ─
   hr: () => <hr className="border-white/[0.08] my-5" />,
 
-  // ── Tables ───────────────────────────────────────────────────────────────
+  // ── Tables ─
   table: ({ children }) => (
     <div className="overflow-x-auto mb-4">
       <table className="w-full text-sm border-collapse">{children}</table>
