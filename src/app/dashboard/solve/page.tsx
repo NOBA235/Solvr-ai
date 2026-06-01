@@ -659,68 +659,64 @@ export default function SolvePage() {
         </div>
       </div>
 
-      {/* Solution Panel - Real Paper Theme */}
-      <div className="flex-1 flex flex-col bg-slate-200 lg:p-6 overflow-hidden">
-        {/* Paper Container */}
-        <div className="flex-1 flex flex-col bg-[#faf9f6] shadow-2xl lg:rounded-md relative w-full max-w-4xl mx-auto overflow-hidden">
-          {/* Classic Notebook Margin Lines (Left side) */}
-          <div className="absolute left-10 lg:left-16 top-0 bottom-0 w-[1px] bg-red-400/60 pointer-events-none z-0" />
-          <div className="absolute left-12 lg:left-[4.5rem] top-0 bottom-0 w-[1px] bg-red-400/60 pointer-events-none z-0" />
-
-          {/* Paper Header / Top Info block */}
-          <div className="relative z-10 px-16 lg:px-28 py-4 flex items-start justify-between border-b-2 border-slate-300/40 bg-[#faf9f6]/95 backdrop-blur-sm">
-            <div className="flex flex-col gap-1.5">
+      {/* Solution Panel - FIXED: Dark text on white background */}
+      <div className="flex-1 flex flex-col bg-gray-100 lg:p-6 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-white shadow-2xl lg:rounded-lg relative w-full max-w-4xl mx-auto overflow-hidden border border-gray-200">
+          
+          {/* Solution Header */}
+          <div className="relative z-10 px-6 lg:px-10 py-5 flex items-start justify-between border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
+            <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-gray-400 text-xs uppercase tracking-widest font-semibold">Subject:</span>
-                <div className="font-bold text-sm lg:text-base flex items-center gap-1.5" style={{ color: activeSubject.color }}>
+                <span className="text-gray-500 text-xs uppercase tracking-wider font-semibold">Subject:</span>
+                <div className="font-semibold text-sm lg:text-base flex items-center gap-1.5 text-gray-900">
                   {(() => {
                     const Icon = activeSubject.icon
                     const SecondaryIcon = activeSubject.secondaryIcon
                     return (
                       <>
-                        <Icon className="w-4 h-4" />
-                        <span className="mx-1">·</span>
-                        <SecondaryIcon className="w-3.5 h-3.5 opacity-75" />
+                        <Icon className="w-4 h-4" style={{ color: activeSubject.color }} />
+                        <span className="mx-1 text-gray-300">·</span>
+                        <SecondaryIcon className="w-3.5 h-3.5 opacity-75" style={{ color: activeSubject.color }} />
                       </>
                     )
                   })()}
-                  {activeSubject.label}
+                  <span style={{ color: activeSubject.color }}>{activeSubject.label}</span>
                 </div>
               </div>
               
               {state === 'done' && metadata?.topic && (
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-400 text-xs uppercase tracking-widest font-semibold">Topic:</span>
-                  <span className="text-slate-800 text-sm font-medium flex items-center gap-1.5">
-                    <FiBook className="w-3.5 h-3.5 text-slate-400" />
+                  <span className="text-gray-500 text-xs uppercase tracking-wider font-semibold">Topic:</span>
+                  <span className="text-gray-800 text-sm font-medium flex items-center gap-1.5">
+                    <FiBook className="w-3.5 h-3.5 text-gray-400" />
                     {String(metadata.topic)}
                   </span>
                 </div>
               )}
               
-              <div className="text-sm text-slate-500 font-serif italic mt-1 flex items-center gap-2">
+              <div className="text-sm text-gray-600 flex items-center gap-2 mt-1">
                 {state === 'solving' && (
                   <>
-                    <FiLoader className="w-3.5 h-3.5 animate-spin" />
-                    Writing out solution...
+                    <FiLoader className="w-3.5 h-3.5 animate-spin text-blue-500" />
+                    <span>Solving your problem...</span>
                   </>
                 )}
                 {state === 'done' && (
                   <>
                     <FiCheckCircle className="w-3.5 h-3.5 text-green-500" />
-                    Solution ready.
+                    <span>Solution ready</span>
                   </>
                 )}
                 {state === 'idle' && (
                   <>
-                    <FiBookOpen className="w-3.5 h-3.5" />
-                    Waiting for assignment...
+                    <FiBookOpen className="w-3.5 h-3.5 text-gray-400" />
+                    <span>Ready to solve</span>
                   </>
                 )}
                 {state === 'error' && (
                   <>
                     <FiXCircle className="w-3.5 h-3.5 text-red-500" />
-                    Something went wrong.
+                    <span>Something went wrong</span>
                   </>
                 )}
               </div>
@@ -728,142 +724,160 @@ export default function SolvePage() {
 
             <div className="flex flex-col items-end gap-3 pt-1">
               <div className="flex items-center gap-4">
-                {/* Stamped Difficulty Tag */}
                 {state === 'done' && metadata?.difficulty && (() => {
                   const diff = metadata?.difficulty ?? ''
                   const ds = difficultyStyle[diff] ?? difficultyStyle.medium
                   return (
                     <span 
-                      className="text-xs font-bold px-3 py-1 border-2 transform rotate-2 shadow-sm rounded-sm flex items-center gap-1" 
-                      style={{ color: ds.color, borderColor: ds.color, background: `${ds.color}10` }}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm" 
+                      style={{ color: ds.color, background: ds.bg }}
                     >
                       {diff === 'easy' && <FiSmile className="w-3 h-3" />}
-                      {diff === 'hard' && <FiZap className="w-3 h-3" />}
-                      {diff === 'expert' && <FiActivity className="w-3 h-3" />}
-                      {ds.label.toUpperCase()}
+                      {diff === 'medium' && <FiZap className="w-3 h-3" />}
+                      {diff === 'hard' && <FiActivity className="w-3 h-3" />}
+                      {diff === 'expert' && <FiZap className="w-3 h-3" />}
+                      {ds.label}
                     </span>
                   )
                 })()}
                 
-                {/* Next Question / Turn Page Button */}
                 {state === 'done' && (
                   <button
                     onClick={handleNewQuestion}
-                    className="text-sm text-slate-600 hover:text-slate-900 px-3 py-1.5 font-medium hover:bg-slate-200/50 rounded transition-colors flex items-center gap-1"
+                    className="text-sm text-gray-700 hover:text-gray-900 px-4 py-2 font-medium hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-1.5 border border-gray-200"
                   >
-                    Turn Page <FiChevronRight className="w-4 h-4" />
+                    New Question <FiChevronRight className="w-4 h-4" />
                   </button>
                 )}
               </div>
+              
+              {state === 'done' && metadata?.processingTimeMs && (
+                <span className="text-xs text-gray-400">
+                  Solved in {(metadata.processingTimeMs / 1000).toFixed(1)}s
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Solution Content - The Writing Area */}
+          {/* Solution Content - EXPLICIT DARK TEXT STYLING */}
           <div 
             ref={solutionRef} 
-            className="flex-1 overflow-y-auto px-16 lg:px-28 py-8 relative z-10"
-            style={{
-              /* Faint blue horizontal lines that scroll with the text */
-              backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(96, 165, 250, 0.2) 31px, rgba(96, 165, 250, 0.2) 32px)',
-              backgroundAttachment: 'local'
-            }}
+            className="flex-1 overflow-y-auto px-6 lg:px-10 py-8 relative z-10 bg-white"
+            style={{ color: '#1f2937' }} // Explicit dark gray text color
           >
-            <div className="relative min-h-full">
+            <div className="relative min-h-full max-w-3xl mx-auto">
               
               {/* Idle State */}
               {state === 'idle' && (
-                <div className="flex flex-col items-center justify-center min-h-[50vh] text-center opacity-60">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
                   <motion.div
-                    animate={{ y: [0, -5, 0] }}
+                    animate={{ y: [0, -8, 0] }}
                     transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                    className="mb-4 text-slate-300"
+                    className="mb-6 text-gray-300"
                   >
                     {(() => {
                       const Icon = activeSubject.icon
-                      return <Icon className="w-16 h-16" />
+                      return <Icon className="w-20 h-20" />
                     })()}
                   </motion.div>
-                  <h3 className="text-xl font-serif text-slate-400 mb-2">Blank Page</h3>
-                  <p className="text-sm text-slate-400 font-serif max-w-xs">Ask a question or upload a photo to start writing.</p>
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">Ready to Help</h3>
+                  <p className="text-gray-600 max-w-md">
+                    Type your {activeSubject.label.toLowerCase()} question or upload a photo to get a detailed solution.
+                  </p>
+                  <div className="mt-8 grid grid-cols-2 gap-4 max-w-md">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-left border border-blue-200">
+                      <FiCamera className="w-5 h-5 text-blue-500 mb-2" />
+                      <p className="text-sm font-semibold text-gray-800">Upload Photo</p>
+                      <p className="text-xs text-gray-600 mt-1">Snap a pic of your problem</p>
+                    </div>
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-left border border-purple-200">
+                      <FiSend className="w-5 h-5 text-purple-500 mb-2" />
+                      <p className="text-sm font-semibold text-gray-800">Type Question</p>
+                      <p className="text-xs text-gray-600 mt-1">Or write it out in words</p>
+                    </div>
+                  </div>
                 </div>
               )}
 
               {/* Solving State */}
               {state === 'solving' && !solution && (
-                <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
-                    className="w-10 h-10 border-4 border-slate-200 border-t-slate-700 rounded-full"
+                    className="w-14 h-14 border-4 border-gray-200 border-t-blue-500 rounded-full"
                   />
-                  <div className="text-center font-serif text-slate-600">
-                    <p className="font-medium flex items-center gap-2">
-                      <TbBrain className="w-5 h-5 text-slate-500" />
-                      Working it out...
+                  <div className="text-center">
+                    <p className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2 justify-center">
+                      <TbBrain className="w-5 h-5 text-blue-500" />
+                      Thinking...
                     </p>
+                    <p className="text-sm text-gray-600">Analyzing your {activeSubject.label.toLowerCase()} problem</p>
                   </div>
                 </div>
               )}
 
-              {/* Solution Content */}
+              {/* Solution Content - FIXED: Dark text with explicit styling */}
               {(state === 'solving' || state === 'done') && solution && (
-                <div className="max-w-3xl">
-                  {/* Ink colored prose text */}
-                  <div className="prose prose-slate prose-p:text-slate-800 prose-headings:text-slate-900 max-w-none pb-6">
+                <div className="text-gray-900">
+                  {/* Solution Text - Explicit dark text styling */}
+                  <div className="text-gray-900 leading-relaxed text-base lg:text-lg">
                     <MathRenderer streaming={state === 'solving'}>
                       {solution}
                     </MathRenderer>
                   </div>
 
-                  {/* Formulas (Styled as sticky notes) */}
+                  {/* Key Formulas */}
                   {state === 'done' && metadata?.keyFormulas && metadata.keyFormulas.length > 0 && (
                     <motion.div
                       className="mt-10 mb-6"
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: 0.3 }}
                     >
-                      <div className="flex items-center gap-2 mb-4">
-                        <FiBookOpen className="w-4 h-4 text-slate-500" />
-                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Important Formulas</span>
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
+                        <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Key Formulas</span>
                       </div>
-                      <div className="flex flex-wrap gap-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {(metadata?.keyFormulas ?? []).map((f: string, i: number) => (
                           <div
-                            key={f}
-                            className={`px-4 py-3 shadow-md border border-yellow-200 text-sm font-mono text-slate-800 bg-yellow-100/90 rounded-sm transform ${i % 2 === 0 ? '-rotate-1' : 'rotate-1'} flex items-center gap-2`}
+                            key={i}
+                            className="px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-sm font-medium text-gray-800 flex items-center gap-3 hover:bg-blue-100 transition-colors"
                           >
-                            <TbMathFunction className="w-4 h-4 text-yellow-600" />
-                            {f}
+                            <TbMathFunction className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <span>{f}</span>
                           </div>
                         ))}
                       </div>
                     </motion.div>
                   )}
 
-                  {/* Grading / Feedback Footer */}
+                  {/* Feedback Section */}
                   {state === 'done' && (
                     <motion.div
-                      className="mt-12 pt-6 border-t-2 border-dashed border-slate-300 flex items-center gap-4"
+                      className="mt-12 pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 }}
                     >
-                      <span className="text-sm font-serif italic text-slate-500">Did this solution help?</span>
-                      <button
-                        onClick={() => toast.success('Great! Glad it helped.')}
-                        className="p-2 hover:bg-green-100 rounded-full transition-colors border-2 border-transparent hover:border-green-300 group"
-                        title="Yes"
-                      >
-                        <FiSmile className="w-5 h-5 text-slate-400 group-hover:text-green-600 transition-colors" />
-                      </button>
-                      <button
-                        onClick={() => toast.success('Thanks for the feedback.')}
-                        className="p-2 hover:bg-red-100 rounded-full transition-colors border-2 border-transparent hover:border-red-300 group"
-                        title="No"
-                      >
-                        <FiFrown className="w-5 h-5 text-slate-400 group-hover:text-red-600 transition-colors" />
-                      </button>
+                      <span className="text-sm text-gray-700 font-medium">Was this solution helpful?</span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => toast.success('Great! Glad it helped.')}
+                          className="p-2.5 hover:bg-green-50 rounded-lg transition-colors border border-gray-200 hover:border-green-300 group"
+                          title="Yes, helpful"
+                        >
+                          <FiSmile className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
+                        </button>
+                        <button
+                          onClick={() => toast.success("Thanks for the feedback. We'll improve.")}
+                          className="p-2.5 hover:bg-red-50 rounded-lg transition-colors border border-gray-200 hover:border-red-300 group"
+                          title="No, not helpful"
+                        >
+                          <FiFrown className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+                        </button>
+                      </div>
                     </motion.div>
                   )}
                 </div>
@@ -871,20 +885,20 @@ export default function SolvePage() {
 
               {/* Error State */}
               {state === 'error' && !solution && (
-                <div className="flex flex-col items-center justify-center min-h-[50vh] text-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center border border-red-200">
+                <div className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center border-2 border-red-200">
                     <FiXCircle className="w-8 h-8 text-red-500" />
                   </div>
-                  <div className="font-serif">
-                    <h3 className="font-semibold text-slate-800 mb-1">Calculation Error</h3>
-                    <p className="text-sm text-slate-500">Check your connection or question and try again.</p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">Something went wrong</h3>
+                    <p className="text-sm text-gray-600">Please check your connection or try rephrasing your question.</p>
                   </div>
                   <button
                     onClick={handleNewQuestion}
-                    className="mt-2 text-sm text-slate-700 bg-white shadow-sm border border-slate-300 px-6 py-2 rounded-sm hover:bg-slate-50 transition-colors font-medium flex items-center gap-2"
+                    className="mt-2 text-sm font-medium text-gray-700 bg-white shadow-sm border border-gray-300 px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
                   >
                     <FiTrash2 className="w-4 h-4" />
-                    Erase and Retry
+                    Clear and try again
                   </button>
                 </div>
               )}
