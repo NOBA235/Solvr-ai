@@ -5,17 +5,39 @@ import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import SoVLogo from '@/components/SoVLogo';
-const SUBJECTS = [
-  { icon: '📐', name: 'Mathematics', color: '#2563EB', bgColor: 'bg-surface-blue', examples: ['Integrate ∫sin(x)dx', 'Solve quadratic ax²+bx+c=0', 'Matrix eigenvectors'] },
-  { icon: '⚡', name: 'Physics', color: '#7C3AED', bgColor: 'bg-purple-50', examples: ['F = ma problem', 'Circuit analysis', 'Projectile motion'] },
-  { icon: '⚗️', name: 'Chemistry', color: '#059669', bgColor: 'bg-surface-green', examples: ['Balance redox equation', 'Titration calculations', 'Orbital hybridisation'] },
-  { icon: '🧬', name: 'Biology', color: '#DC2626', bgColor: 'bg-red-50', examples: ['DNA replication', 'Enzyme kinetics', 'Photosynthesis equation'] },
+import { 
+  FaCalculator, FaBolt, FaFlask, FaDna, 
+  FaCamera, FaBrain, FaClipboardList, 
+  FaMicroscope, FaCheckCircle, FaHandPointUp, 
+  FaBars, FaTimes, FaImage, FaMagic, FaCheck 
+} from 'react-icons/fa'
+import { IconType } from 'react-icons'
+
+type Subject = {
+  icon: IconType;
+  name: string;
+  color: string;
+  bgColor: string;
+  examples: string[];
+}
+
+const SUBJECTS: Subject[] = [
+  { icon: FaCalculator, name: 'Mathematics', color: '#2563EB', bgColor: 'bg-surface-blue', examples: ['Integrate ∫sin(x)dx', 'Solve quadratic ax²+bx+c=0', 'Matrix eigenvectors'] },
+  { icon: FaBolt, name: 'Physics', color: '#7C3AED', bgColor: 'bg-purple-50', examples: ['F = ma problem', 'Circuit analysis', 'Projectile motion'] },
+  { icon: FaFlask, name: 'Chemistry', color: '#059669', bgColor: 'bg-surface-green', examples: ['Balance redox equation', 'Titration calculations', 'Orbital hybridisation'] },
+  { icon: FaDna, name: 'Biology', color: '#DC2626', bgColor: 'bg-red-50', examples: ['DNA replication', 'Enzyme kinetics', 'Photosynthesis equation'] },
 ]
 
-const STEPS = [
-  { icon: '📸', title: 'Snap or Type', desc: 'Upload a photo of your textbook, worksheet, or type the problem directly' },
-  { icon: '🧠', title: 'AI Analyses', desc: 'Claude AI reads the problem, identifies the topic and relevant formulas' },
-  { icon: '📋', title: 'Step-by-Step', desc: 'Get a full worked solution with every step explained in plain English' },
+type Step = {
+  icon: IconType;
+  title: string;
+  desc: string;
+}
+
+const STEPS: Step[] = [
+  { icon: FaCamera, title: 'Snap or Type', desc: 'Upload a photo of your textbook, worksheet, or type the problem directly' },
+  { icon: FaBrain, title: 'AI Analyses', desc: 'Claude AI reads the problem, identifies the topic and relevant formulas' },
+  { icon: FaClipboardList, title: 'Step-by-Step', desc: 'Get a full worked solution with every step explained in plain English' },
 ]
 
 const STATS = [
@@ -70,11 +92,12 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 shrink-0">
-  <SoVLogo className="h-7 w-7 sm:h-8 sm:w-8" />
-  <span className="text-base sm:text-lg font-extrabold tracking-tight text-primary">
-    Solvr AI
-  </span>
-</Link>
+            <SoVLogo className="h-7 w-7 sm:h-8 sm:w-8" />
+            <span className="text-base sm:text-lg font-extrabold tracking-tight text-primary">
+              Solvr AI
+            </span>
+          </Link>
+          
           {/* Desktop Nav Links */}
           <div className="hidden md:flex items-center gap-6 text-xs text-muted font-mono">
             <Link href="/pricing" className="hover:text-ink transition-colors">Pricing</Link>
@@ -114,13 +137,7 @@ export default function LandingPage() {
             className="md:hidden p-2 text-muted hover:text-ink transition-colors"
             aria-label="Toggle menu"
           >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
+            {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
           </button>
         </div>
 
@@ -206,12 +223,12 @@ export default function LandingPage() {
                     <div className="w-2 h-2 rounded-full bg-yellow-400" />
                     <div className="w-2 h-2 rounded-full bg-green-400" />
                   </div>
-                  <span className="text-[10px] sm:text-xs text-muted font-mono">Solvr AI Demo</span>
+                  <span className="text-[10px] sm:text-xs text-muted font-mono">What do you want to solve today?</span>
                 </div>
                 <div className="text-[10px] sm:text-xs text-muted font-mono">
                   <span className="inline-flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    AI Ready
+                    Solver
                   </span>
                 </div>
               </div>
@@ -224,13 +241,14 @@ export default function LandingPage() {
                     <button
                       key={sub.name}
                       onClick={() => setSelectedSubject(selectedSubject === sub.name ? '' : sub.name)}
-                      className={`flex-shrink-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border transition-all whitespace-nowrap ${
+                      className={`flex-shrink-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-mono border transition-all whitespace-nowrap flex items-center gap-1.5 ${
                         selectedSubject === sub.name
                           ? 'border-primary bg-surface-blue text-primary font-semibold'
                           : 'border-line text-muted hover:border-primary/30 hover:text-ink'
                       }`}
                     >
-                      {sub.icon} <span className="hidden sm:inline">{sub.name}</span>
+                      <sub.icon className="text-sm" /> 
+                      <span className="hidden sm:inline">{sub.name}</span>
                       <span className="sm:hidden">{sub.name.slice(0, 4)}</span>
                     </button>
                   ))}
@@ -256,9 +274,7 @@ export default function LandingPage() {
                       className="absolute bottom-2 right-2 p-1.5 sm:p-2 bg-white border border-line rounded-lg hover:bg-surface-blue hover:border-primary/30 transition-all group"
                       title="Upload image"
                     >
-                      <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
+                      <FaImage className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted group-hover:text-primary transition-colors" />
                     </button>
                   </div>
 
@@ -266,12 +282,9 @@ export default function LandingPage() {
                   <div className="flex gap-2">
                     <button
                       type="submit"
-                      className="flex-1 inline-flex items-center justify-center gap-1.5 bg-primary text-white font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:bg-primary/90 transition-all hover:shadow-md active:scale-[0.98] text-xs sm:text-sm"
+                      className="flex-1 inline-flex items-center justify-center gap-1.5 bg-primary text-white font-semibold px-3 sm:px-4 py-2 sm:py-2.5 rounded-md sm:rounded-lg hover:bg-primary/90 transition-all hover:shadow-md active:scale-[0.98] text-xs sm:text-sm"
                     >
-                      <span>Solve</span>
-                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                      </svg>
+                      <span>Solve</span>                    
                     </button>
                     
                     <button
@@ -279,9 +292,7 @@ export default function LandingPage() {
                       onClick={() => window.location.href = '/auth/register'}
                       className="flex-1 inline-flex items-center justify-center gap-1.5 bg-white border border-line text-muted font-mono px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg sm:rounded-xl hover:bg-line/30 transition-all text-xs sm:text-sm"
                     >
-                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
+                      <FaImage className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       <span className="hidden sm:inline">Upload Image</span>
                       <span className="sm:hidden">Upload</span>
                     </button>
@@ -306,8 +317,8 @@ export default function LandingPage() {
                       <div className="h-1.5 bg-primary/10 rounded w-1/2 animate-pulse" />
                       <div className="h-1.5 bg-primary/10 rounded w-2/3 animate-pulse" />
                     </div>
-                    <p className="text-[10px] sm:text-xs text-muted font-mono mt-2 text-center">
-                      👆 Demo only. <Link href="/auth/register" className="text-primary hover:underline">Sign up</Link> for real solutions
+                    <p className="text-[10px] sm:text-xs text-muted font-mono mt-2 text-center flex items-center justify-center gap-1">
+                      <FaHandPointUp className="text-primary" /> Demo only. <Link href="/auth/register" className="text-primary hover:underline">Sign up</Link> for real solutions
                     </p>
                   </motion.div>
                 )}
@@ -338,18 +349,18 @@ export default function LandingPage() {
             transition={{ duration: 0.5 }}
           >
             {/* Badge - Smaller */}
-            <div className="inline-flex items-center gap-1.5 bg-surface-blue border border-primary/20 rounded-full px-2.5 sm:px-3 py-1 text-[10px] sm:text-xs font-mono text-primary mb-4 sm:mb-6">
-             AI that understand your syllabus
-            </div>
+            <h1 className=" px-2.5 sm:px-3 py-1 text-[20px] font-mono text-primary mb-4 sm:mb-6">
+            Learn Anytime Anywhere
+            </h1>
 
             {/* Heading - Responsive & compact */}
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] mb-3 sm:mb-4 px-1">
               <span className="block">Snap any problem.</span>
-              <span className="block mt-1 text-primary">Understand every step.</span>
+              <span className="block mt-1 ">Understand every step.</span>
             </h1>
 
             {/* Subtitle - Compact */}
-            <p className="text-sm sm:text-base lg:text-lg text-muted font-mono max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
+            <p className="text-sm sm:text-base lg:text-lg text-muted  max-w-lg mx-auto mb-6 sm:mb-8 leading-relaxed px-2">
               Upload a photo or type any Physics, Maths, Chemistry, or Biology problem. Get step-by-step solutions.
             </p>
 
@@ -380,13 +391,13 @@ export default function LandingPage() {
           >
             {/* Card Header */}
             <div className="flex items-start sm:items-center gap-2 mb-2 sm:mb-3 pb-2 sm:pb-3 border-b border-line">
-              <span className="text-lg sm:text-xl">⚡</span>
+              <FaBolt className="text-yellow-500 text-lg sm:text-xl" />
               <div className="flex-1 min-w-0">
                 <div className="text-xs sm:text-sm font-semibold truncate">Newton&apos;s Second Law</div>
                 <div className="text-[10px] sm:text-xs text-muted font-mono">Medium · Solved in 2.3s</div>
               </div>
-              <span className="hidden sm:inline-flex ml-auto text-[10px] font-mono text-green-700 border border-green-200 bg-surface-green px-1.5 py-0.5 rounded shrink-0">
-                ✓ Solved
+              <span className="hidden sm:inline-flex items-center gap-1 ml-auto text-[10px] font-mono text-green-700 border border-green-200 bg-surface-green px-1.5 py-0.5 rounded shrink-0">
+                <FaCheck /> Solved
               </span>
             </div>
 
@@ -415,8 +426,8 @@ export default function LandingPage() {
                 ))}
                 
                 {/* Answer */}
-                <div className="bg-surface-green border border-green-200 rounded-lg px-2.5 py-1.5 font-mono text-green-700 text-[10px] sm:text-xs font-bold">
-                  ✅ a = 4 m/s²
+                <div className="bg-surface-green border border-green-200 rounded-lg px-2.5 py-1.5 font-mono text-green-700 text-[10px] sm:text-xs font-bold flex items-center gap-1.5">
+                  <FaCheckCircle /> a = 4 m/s²
                 </div>
               </div>
             </div>
@@ -466,7 +477,9 @@ export default function LandingPage() {
                 viewport={{ once: true }}
                 whileHover={{ y: -2 }}
               >
-                <div className="text-xl sm:text-2xl mb-1.5 sm:mb-2">{sub.icon}</div>
+                <div className="text-xl sm:text-2xl mb-1.5 sm:mb-2 text-ink">
+                  <sub.icon style={{ color: sub.color }} />
+                </div>
                 <h3 className="text-xs sm:text-sm font-bold mb-1.5 sm:mb-2" style={{ color: sub.color }}>
                   {sub.name}
                 </h3>
@@ -498,7 +511,7 @@ export default function LandingPage() {
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-6">
-            {STEPS.map(({ icon, title, desc }, i) => (
+            {STEPS.map(({ icon: IconComponent, title, desc }, i) => (
               <motion.div
                 key={title}
                 className="px-2"
@@ -507,8 +520,8 @@ export default function LandingPage() {
                 transition={{ delay: i * 0.15 }}
                 viewport={{ once: true }}
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-surface-blue border border-primary/20 flex items-center justify-center text-lg sm:text-xl mx-auto mb-2 sm:mb-3">
-                  {icon}
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-surface-blue border border-primary/20 flex items-center justify-center text-lg sm:text-xl mx-auto mb-2 sm:mb-3 text-primary">
+                  <IconComponent />
                 </div>
                 <h3 className="text-sm sm:text-base font-bold mb-1.5 text-ink">{title}</h3>
                 <p className="text-xs sm:text-sm text-muted font-mono leading-relaxed">{desc}</p>
@@ -523,7 +536,7 @@ export default function LandingPage() {
         <div className="max-w-lg mx-auto text-center">
           <h2 className="text-xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight mb-3 sm:mb-4 px-1 text-ink">
             Ready to{' '}
-            <span className="text-primary">understand</span>{' '}
+            <span>understand</span>{' '}
             your homework?
           </h2>
           <p className="text-xs sm:text-sm text-muted font-mono mb-5 sm:mb-6">
@@ -542,7 +555,7 @@ export default function LandingPage() {
       <footer className="border-t border-line py-4 sm:py-6 px-4 sm:px-6 bg-white">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[10px] sm:text-xs text-muted font-mono">
           <div className="flex items-center gap-2">
-            <span>🔬</span>
+            <FaMicroscope className="text-primary text-sm sm:text-base" />
             <span className="text-ink font-bold">Solvr AI</span>
             <span className="hidden sm:inline">— Built for students</span>
           </div>
