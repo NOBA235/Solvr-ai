@@ -1,5 +1,4 @@
 'use client'
-// ============================================================
 //  MathRenderer
 //  Renders markdown with full LaTeX support via KaTeX.
 //  Handles:
@@ -7,7 +6,6 @@
 //    Block math:   $$\int_0^\infty e^{-x}dx$$  →  centred display
 //    Code blocks:  ```python  →  syntax highlighted
 //    Tables, lists, headers, bold, etc.
-// ============================================================
 
 import ReactMarkdown from 'react-markdown'
 import remarkMath    from 'remark-math'
@@ -22,45 +20,51 @@ interface MathRendererProps {
   className?: string
 }
 
-// Custom component overrides — maps markdown elements to styled JSX
+// Custom component overrides — NOTEBOOK THEME (dark text on light background)
 const components: Components = {
-  // ── Headings ────────────────────────────────────────────────────────────
+  // ── Headings 
   h1: ({ children }) => (
-    <h1 className="text-xl font-extrabold text-white mt-6 mb-3 tracking-tight">{children}</h1>
+    <h1 className="text-xl font-extrabold text-gray-900 mt-6 mb-3 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+      {children}
+    </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="text-lg font-bold text-white mt-6 mb-3 flex items-center gap-2 border-b border-white/[0.07] pb-2">
+    <h2 className="text-lg font-bold text-gray-900 mt-6 mb-3 flex items-center gap-2 border-b border-[#d4c9b5] pb-2" style={{ fontFamily: 'Georgia, serif' }}>
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="text-base font-semibold text-white/85 mt-4 mb-2">{children}</h3>
+    <h3 className="text-base font-semibold text-gray-800 mt-4 mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+      {children}
+    </h3>
   ),
   h4: ({ children }) => (
-    <h4 className="text-sm font-semibold text-white/70 mt-3 mb-1.5">{children}</h4>
+    <h4 className="text-sm font-semibold text-gray-700 mt-3 mb-1.5" style={{ fontFamily: 'Georgia, serif' }}>
+      {children}
+    </h4>
   ),
 
-  // ── Body text ────────────────────────────────────────────────────────────
+  // ── Body text 
   p: ({ children }) => (
-    <p className="text-sm text-white/70 leading-relaxed mb-3">{children}</p>
+    <p className="text-base text-gray-900 leading-relaxed mb-3">{children}</p>
   ),
   strong: ({ children }) => (
-    <strong className="text-white font-semibold">{children}</strong>
+    <strong className="text-gray-950 font-semibold">{children}</strong>
   ),
   em: ({ children }) => (
-    <em className="text-white/80 italic">{children}</em>
+    <em className="text-gray-700 italic">{children}</em>
   ),
 
-  // ── Lists ────────────────────────────────────────────────────────────────
+  // ── Lists ───
   ul: ({ children }) => (
     <ul className="list-none space-y-1.5 mb-3 ml-2">{children}</ul>
   ),
   ol: ({ children }) => (
-    <ol className="list-decimal list-inside space-y-1.5 mb-3 ml-2">{children}</ol>
+    <ol className="list-decimal list-inside space-y-1.5 mb-3 ml-2 text-gray-900">{children}</ol>
   ),
   li: ({ children }) => (
-    <li className="text-sm text-white/70 flex items-start gap-2">
-      <span className="text-violet mt-0.5 text-xs flex-shrink-0">▸</span>
+    <li className="text-base text-gray-900 flex items-start gap-2">
+      <span className="text-[#8b7355] mt-0.5 text-xs flex-shrink-0">▸</span>
       <span>{children}</span>
     </li>
   ),
@@ -70,7 +74,7 @@ const components: Components = {
     const isBlock = className?.includes('language-')
     if (isBlock) {
       return (
-        <code className={`${className || ''} text-xs`} {...props}>
+        <code className={`${className || ''} text-sm`} {...props}>
           {children}
         </code>
       )
@@ -78,7 +82,7 @@ const components: Components = {
     // Inline code — but NOT math (KaTeX handles those)
     return (
       <code
-        className="bg-white/[0.07] text-acid font-mono text-xs px-1.5 py-0.5 rounded border border-white/10"
+        className="bg-[#f0ebe0] text-[#4a3728] font-mono text-sm px-1.5 py-0.5 rounded border border-[#d4c9b5]"
         {...props}
       >
         {children}
@@ -86,45 +90,45 @@ const components: Components = {
     )
   },
   pre: ({ children }) => (
-    <pre className="bg-[#0d0d1a] border border-white/[0.08] rounded-xl p-4 mb-4 overflow-x-auto text-xs leading-relaxed">
+    <pre className="bg-[#f5f0e8] border border-[#d4c9b5] rounded-xl p-4 mb-4 overflow-x-auto text-sm leading-relaxed text-gray-900">
       {children}
     </pre>
   ),
 
   // ── Block quote (used for hints/notes)
   blockquote: ({ children }) => (
-    <blockquote className="border-l-2 border-violet/50 pl-4 my-3 italic text-white/55 text-sm">
+    <blockquote className="border-l-3 border-[#8b7355] pl-4 my-3 italic text-gray-700 text-base">
       {children}
     </blockquote>
   ),
 
   // ── Divider ─
-  hr: () => <hr className="border-white/[0.08] my-5" />,
+  hr: () => <hr className="border-[#d4c9b5] my-5" />,
 
   // ── Tables ─
   table: ({ children }) => (
     <div className="overflow-x-auto mb-4">
-      <table className="w-full text-sm border-collapse">{children}</table>
+      <table className="w-full text-base border-collapse">{children}</table>
     </div>
   ),
   thead: ({ children }) => (
-    <thead className="bg-white/[0.05]">{children}</thead>
+    <thead className="bg-[#f0ebe0]">{children}</thead>
   ),
   th: ({ children }) => (
-    <th className="text-left px-3 py-2 text-xs font-mono text-white/50 tracking-wider border-b border-white/[0.08]">
+    <th className="text-left px-3 py-2 text-sm font-semibold text-gray-800 tracking-wider border-b border-[#d4c9b5]">
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td className="px-3 py-2 text-sm text-white/65 border-b border-white/[0.04]">
+    <td className="px-3 py-2 text-base text-gray-900 border-b border-[#e8ddd0]">
       {children}
     </td>
   ),
 
-  // ── Links ────────────────────────────────────────────────────────────────
+  // ── Links ──
   a: ({ href, children }) => (
     <a href={href} target="_blank" rel="noopener noreferrer"
-      className="text-violet underline underline-offset-2 hover:text-violet/80 transition-colors">
+      className="text-[#8b7355] underline underline-offset-2 hover:text-[#5c4d3c] transition-colors">
       {children}
     </a>
   ),
@@ -139,7 +143,7 @@ export default function MathRenderer({ children, streaming = false, className = 
           [rehypeKatex, {
             // KaTeX options
             throwOnError: false,         // never crash — show error marker instead
-            errorColor:   '#ff3b5c',     // red error markers match our danger color
+            errorColor:   '#dc2626',     // red error markers for visibility
             strict:       false,         // allow some non-standard LaTeX
             trust:        false,         // don't trust HTML in LaTeX
             output:       'htmlAndMathml', // best browser compat + accessibility
@@ -153,7 +157,7 @@ export default function MathRenderer({ children, streaming = false, className = 
 
       {/* Blinking cursor for streaming mode */}
       {streaming && (
-        <span className="inline-block w-0.5 h-4 bg-acid ml-0.5 align-middle animate-[cursor-blink_0.6s_ease-in-out_infinite]" />
+        <span className="inline-block w-0.5 h-4 bg-[#8b7355] ml-0.5 align-middle animate-[cursor-blink_0.6s_ease-in-out_infinite]" />
       )}
     </div>
   )

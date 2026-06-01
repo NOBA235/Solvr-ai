@@ -8,7 +8,7 @@ export const PLANS: Record<string, PlanConfig> = {
     stripePriceId: { monthly: '', yearly: '' },
     limits: {
       problemsPerMonth: 5,
-      labAccess: false,
+      labAccess: true,
       imageUpload: false,
       pdfUpload: false,
       historyDays: 3,
