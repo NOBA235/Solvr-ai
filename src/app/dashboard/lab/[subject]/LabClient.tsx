@@ -163,7 +163,7 @@ export default function LabClient({ subjectId }: { subjectId: string }) {
   if (!subject) return null
 
   return (
-    <div className="flex h-full overflow-hidden bg-[#090910]">
+    <div className="flex h-full overflow-hidden bg-[#ffff]">
       {/* Sidebar */}
       <div className="w-52 flex-shrink-0 border-r border-white/[0.06] bg-[#0f0f1a] flex flex-col overflow-hidden">
         <div className="p-3 border-b border-white/[0.06]">

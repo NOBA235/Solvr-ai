@@ -1,5 +1,6 @@
 //src>app>page.tsx
 'use client'
+import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
@@ -337,6 +338,47 @@ export default function LandingPage() {
             backgroundSize: '44px 44px'
           }} />
         </div>
+        
+      {/* Hero Image Section - Responsive */}
+      <section className="px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto -mt-4 sm:-mt-8 relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.7 }}
+          className="relative"
+        >
+          {/* Main Image Container */}
+          <div className="relative rounded-xl sm:rounded-2xl lg:rounded-3xl overflow-hidden border border-line shadow-xl bg-white">
+            {/* Aspect ratio container */}
+            <div className="relative w-full aspect-[16/9] sm:aspect-[16/7] lg:aspect-[16/6]">
+              <Image
+                src="/images/dashboard.png" 
+                alt="Solvr AI Dashboard - Solve problems with AI"
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 90vw, 1200px"
+                priority
+                quality={90}
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+    
+            <div className="absolute top-3 right-3 sm:top-4 sm:right-4 lg:top-6 lg:right-6 bg-white/90 backdrop-blur-sm border border-line rounded-lg px-2.5 py-1.5 sm:px-3 sm:py-2 shadow-sm">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-500 animate-pulse" />
+                <span className="text-[10px] sm:text-xs font-mono text-ink font-semibold">
+                  Live Demo
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Optional: Caption text */}
+          <p className="text-center text-[10px] sm:text-xs text-muted font-mono mt-2 sm:mt-3">
+            Real-time step-by-step solutions for any STEM problem
+          </p>
+        </motion.div>
+        </section>
         
         {/* Subtle Glow Effects */}
         <div className="absolute top-20 sm:top-32 left-1/4 w-64 sm:w-96 h-64 sm:h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
