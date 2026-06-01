@@ -14,18 +14,65 @@ import {
   FiSmile,
   FiFrown,
   FiImage,
-  FiType,
   FiChevronRight,
-  FiGrid,
-  FiSliders
+  FiSliders,
+  FiBook,
+  FiZap,
+  FiTriangle,
+  FiCircle,
+  FiHexagon,
+  FiDroplet,
+  FiHeart,
+  FiActivity,
+  FiBox
 } from 'react-icons/fi'
 import { 
-  MdSchool, 
   MdScience, 
   MdBiotech, 
-  MdCalculate 
+  MdCalculate,
+  MdFunctions,
+  MdTimeline,
+  MdSpeed,
+  MdBluetooth,
+  MdWaterDrop,
+  MdBiotech as MdDna,
+  MdScience as MdPhysics,
+  MdScience as MdChemistry
 } from 'react-icons/md'
-import { GiAbacus, GiMicroscope, GiChemicalDrop } from 'react-icons/gi'
+import { GiMicroscope, GiChemicalDrop, GiDna1, GiAtom, GiBrain } from 'react-icons/gi'
+import { 
+  FaSquareRootAlt, 
+  FaDivide, 
+  FaSuperscript,
+  FaFlask,
+  FaLeaf,
+  FaBolt,
+  FaMagnet,
+  FaVial
+} from 'react-icons/fa'
+import { 
+  SiLatex, 
+  SiWolfram, 
+  SiPython,
+  SiR
+} from 'react-icons/si'
+import { 
+  TbMath, 
+  TbMathFunction, 
+  TbMathIntegral,
+  TbMathSymbols,
+  TbAtom,
+  TbAtom2,
+  TbFlask,
+  TbFlask2,
+  TbMicroscope,
+  TbDna,
+  TbDna2,
+  TbBrain,
+  TbChartBar,
+  TbChartLine,
+  TbFunction
+} from 'react-icons/tb'
 import MathRenderer from '@/components/MathRenderer'
 import CurriculumSelector from '@/components/CurriculumSelector'
 import { fileToBase64, SUBJECT_CONFIG } from '@/lib/utils'
@@ -42,13 +89,48 @@ interface SolutionMeta {
   processingTimeMs?: number
 }
 
-// ── Subject options with React Icons ──────────────────────────────────────────
+// ── Subject options with proper React Icons ──────────────────────────────────
 const SUBJECTS = [
-  { id: 'mathematics' as Subject, label: 'Maths', icon: MdCalculate, color: '#7C3AED', bg: '#F3E8FF' },
-  { id: 'physics' as Subject, label: 'Physics', icon: MdScience, color: '#2563EB', bg: '#EFF6FF' },
-  { id: 'chemistry' as Subject, label: 'Chemistry', icon: GiChemicalDrop, color: '#059669', bg: '#ECFDF5' },
-  { id: 'biology' as Subject, label: 'Biology', icon: GiMicroscope, color: '#EA580C', bg: '#FFF7ED' },
-  { id: 'general' as Subject, label: 'Other', icon: FiBookOpen, color: '#6B7280', bg: '#F9FAFB' },
+  { 
+    id: 'mathematics' as Subject, 
+    label: 'Maths', 
+    icon: TbMath, 
+    color: '#7C3AED', 
+    bg: '#F3E8FF',
+    secondaryIcon: TbMathFunction 
+  },
+  { 
+    id: 'physics' as Subject, 
+    label: 'Physics', 
+    icon: TbAtom, 
+    color: '#2563EB', 
+    bg: '#EFF6FF',
+    secondaryIcon: FaBolt
+  },
+  { 
+    id: 'chemistry' as Subject, 
+    label: 'Chemistry', 
+    icon: TbFlask, 
+    color: '#059669', 
+    bg: '#ECFDF5',
+    secondaryIcon: FaVial
+  },
+  { 
+    id: 'biology' as Subject, 
+    label: 'Biology', 
+    icon: TbDna, 
+    color: '#EA580C', 
+    bg: '#FFF7ED',
+    secondaryIcon: FaLeaf
+  },
+  { 
+    id: 'general' as Subject, 
+    label: 'Other', 
+    icon: FiBookOpen, 
+    color: '#6B7280', 
+    bg: '#F9FAFB',
+    secondaryIcon: FiBook
+  },
 ]
 
 // ── Example prompts with emojis ───────────────────────────────────────────────
@@ -342,7 +424,7 @@ export default function SolvePage() {
                     }}
                     className={`flex items-center gap-2 p-3 rounded-xl border transition-all ${
                       subject === s.id
-                        ? `border-${s.color} bg-${s.color}/10`
+                        ? 'border-current'
                         : 'border-gray-200 bg-white'
                     }`}
                     style={subject === s.id ? { borderColor: s.color, background: `${s.color}10` } : {}}
@@ -577,164 +659,238 @@ export default function SolvePage() {
         </div>
       </div>
 
-      {/* Solution Panel - Responsive */}
-      <div className="flex-1 flex flex-col bg-white lg:bg-gray-50">
-        {/* Solution Header */}
-        <div className="sticky top-0 lg:top-auto bg-white lg:bg-transparent border-b border-gray-100 px-4 lg:px-8 py-3 lg:py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center lg:hidden`} style={{ background: `${activeSubject.color}15` }}>
-              {(() => {
-                const Icon = activeSubject.icon
-                return <Icon className="w-5 h-5" style={{ color: activeSubject.color }} />
-              })()}
-            </div>
-            <div>
-              <div className="font-semibold text-gray-900 text-sm lg:text-base" style={{ color: activeSubject.color }}>
-                {state === 'done' && metadata?.topic
-                  ? String(metadata.topic)
-                  : activeSubject.label}
-              </div>
-              <div className="text-xs text-gray-500">
-                {state === 'solving' && 'Working it out...'}
-                {state === 'done' && 'Solution ready'}
-                {state === 'idle' && 'Waiting for your question'}
-                {state === 'error' && 'Something went wrong'}
-              </div>
-            </div>
-          </div>
+      {/* Solution Panel - Real Paper Theme */}
+      <div className="flex-1 flex flex-col bg-slate-200 lg:p-6 overflow-hidden">
+        {/* Paper Container */}
+        <div className="flex-1 flex flex-col bg-[#faf9f6] shadow-2xl lg:rounded-md relative w-full max-w-4xl mx-auto overflow-hidden">
+          {/* Classic Notebook Margin Lines (Left side) */}
+          <div className="absolute left-10 lg:left-16 top-0 bottom-0 w-[1px] bg-red-400/60 pointer-events-none z-0" />
+          <div className="absolute left-12 lg:left-[4.5rem] top-0 bottom-0 w-[1px] bg-red-400/60 pointer-events-none z-0" />
 
-          <div className="flex items-center gap-2">
-            {state === 'done' && metadata?.difficulty && (() => {
-              const diff = metadata?.difficulty ?? ''
-              const ds = difficultyStyle[diff] ?? difficultyStyle.medium
-              return (
-                <span className="text-xs font-medium px-2.5 py-1 rounded-full" style={{ color: ds.color, background: ds.bg }}>
-                  {ds.label}
-                </span>
-              )
-            })()}
-            {state === 'done' && (
-              <button
-                onClick={handleNewQuestion}
-                className="text-xs text-gray-500 hover:text-gray-700 px-3 py-1.5 rounded-xl border border-gray-200 hover:bg-white transition-colors"
-              >
-                New
-              </button>
-            )}
-          </div>
-        </div>
+          {/* Paper Header / Top Info block */}
+          <div className="relative z-10 px-16 lg:px-28 py-4 flex items-start justify-between border-b-2 border-slate-300/40 bg-[#faf9f6]/95 backdrop-blur-sm">
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400 text-xs uppercase tracking-widest font-semibold">Subject:</span>
+                <div className="font-bold text-sm lg:text-base flex items-center gap-1.5" style={{ color: activeSubject.color }}>
+                  {(() => {
+                    const Icon = activeSubject.icon
+                    const SecondaryIcon = activeSubject.secondaryIcon
+                    return (
+                      <>
+                        <Icon className="w-4 h-4" />
+                        <span className="mx-1">·</span>
+                        <SecondaryIcon className="w-3.5 h-3.5 opacity-75" />
+                      </>
+                    )
+                  })()}
+                  {activeSubject.label}
+                </div>
+              </div>
+              
+              {state === 'done' && metadata?.topic && (
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-400 text-xs uppercase tracking-widest font-semibold">Topic:</span>
+                  <span className="text-slate-800 text-sm font-medium flex items-center gap-1.5">
+                    <FiBook className="w-3.5 h-3.5 text-slate-400" />
+                    {String(metadata.topic)}
+                  </span>
+                </div>
+              )}
+              
+              <div className="text-sm text-slate-500 font-serif italic mt-1 flex items-center gap-2">
+                {state === 'solving' && (
+                  <>
+                    <FiLoader className="w-3.5 h-3.5 animate-spin" />
+                    Writing out solution...
+                  </>
+                )}
+                {state === 'done' && (
+                  <>
+                    <FiCheckCircle className="w-3.5 h-3.5 text-green-500" />
+                    Solution ready.
+                  </>
+                )}
+                {state === 'idle' && (
+                  <>
+                    <FiBookOpen className="w-3.5 h-3.5" />
+                    Waiting for assignment...
+                  </>
+                )}
+                {state === 'error' && (
+                  <>
+                    <FiXCircle className="w-3.5 h-3.5 text-red-500" />
+                    Something went wrong.
+                  </>
+                )}
+              </div>
+            </div>
 
-        {/* Solution Content */}
-        <div ref={solutionRef} className="flex-1 overflow-y-auto px-4 lg:px-8 py-4 lg:py-8">
-          {/* Idle State */}
-          {state === 'idle' && (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center">
-              <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                className="w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-50 flex items-center justify-center mb-5"
-              >
-                {(() => {
-                  const Icon = activeSubject.icon
-                  return <Icon className="w-10 h-10 text-gray-400" />
+            <div className="flex flex-col items-end gap-3 pt-1">
+              <div className="flex items-center gap-4">
+                {/* Stamped Difficulty Tag */}
+                {state === 'done' && metadata?.difficulty && (() => {
+                  const diff = metadata?.difficulty ?? ''
+                  const ds = difficultyStyle[diff] ?? difficultyStyle.medium
+                  return (
+                    <span 
+                      className="text-xs font-bold px-3 py-1 border-2 transform rotate-2 shadow-sm rounded-sm flex items-center gap-1" 
+                      style={{ color: ds.color, borderColor: ds.color, background: `${ds.color}10` }}
+                    >
+                      {diff === 'easy' && <FiSmile className="w-3 h-3" />}
+                      {diff === 'hard' && <FiZap className="w-3 h-3" />}
+                      {diff === 'expert' && <FiActivity className="w-3 h-3" />}
+                      {ds.label.toUpperCase()}
+                    </span>
+                  )
                 })()}
-              </motion.div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">Your solution will appear here</h3>
-              <p className="text-sm text-gray-500 max-w-xs">Ask anything — type it out or snap a photo of your question</p>
-            </div>
-          )}
-
-          {/* Solving State */}
-          {state === 'solving' && !solution && (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] gap-5">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
-                className="w-12 h-12 border-3 border-primary-200 border-t-primary-600 rounded-full"
-              />
-              <div className="text-center">
-                <p className="font-semibold text-gray-700 mb-1">Working it out...</p>
-                <p className="text-sm text-gray-500">AI is reading your question</p>
+                
+                {/* Next Question / Turn Page Button */}
+                {state === 'done' && (
+                  <button
+                    onClick={handleNewQuestion}
+                    className="text-sm text-slate-600 hover:text-slate-900 px-3 py-1.5 font-medium hover:bg-slate-200/50 rounded transition-colors flex items-center gap-1"
+                  >
+                    Turn Page <FiChevronRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
-          )}
+          </div>
 
-          {/* Solution Content */}
-          {(state === 'solving' || state === 'done') && solution && (
-            <div className="max-w-3xl mx-auto">
-              <div className="prose prose-gray max-w-none">
-                <MathRenderer streaming={state === 'solving'}>
-                  {solution}
-                </MathRenderer>
-              </div>
+          {/* Solution Content - The Writing Area */}
+          <div 
+            ref={solutionRef} 
+            className="flex-1 overflow-y-auto px-16 lg:px-28 py-8 relative z-10"
+            style={{
+              /* Faint blue horizontal lines that scroll with the text */
+              backgroundImage: 'repeating-linear-gradient(transparent, transparent 31px, rgba(96, 165, 250, 0.2) 31px, rgba(96, 165, 250, 0.2) 32px)',
+              backgroundAttachment: 'local'
+            }}
+          >
+            <div className="relative min-h-full">
+              
+              {/* Idle State */}
+              {state === 'idle' && (
+                <div className="flex flex-col items-center justify-center min-h-[50vh] text-center opacity-60">
+                  <motion.div
+                    animate={{ y: [0, -5, 0] }}
+                    transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
+                    className="mb-4 text-slate-300"
+                  >
+                    {(() => {
+                      const Icon = activeSubject.icon
+                      return <Icon className="w-16 h-16" />
+                    })()}
+                  </motion.div>
+                  <h3 className="text-xl font-serif text-slate-400 mb-2">Blank Page</h3>
+                  <p className="text-sm text-slate-400 font-serif max-w-xs">Ask a question or upload a photo to start writing.</p>
+                </div>
+              )}
 
-              {state === 'done' && metadata?.keyFormulas && metadata.keyFormulas.length > 0 && (
-                <motion.div
-                  className="mt-8 pt-6 border-t border-gray-100"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <div className="flex items-center gap-2 mb-4">
-                    <FiBookOpen className="w-4 h-4 text-gray-400" />
-                    <span className="text-xs font-medium text-gray-500 uppercase tracking-wider">Key formulas used</span>
+              {/* Solving State */}
+              {state === 'solving' && !solution && (
+                <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                    className="w-10 h-10 border-4 border-slate-200 border-t-slate-700 rounded-full"
+                  />
+                  <div className="text-center font-serif text-slate-600">
+                    <p className="font-medium flex items-center gap-2">
+                      <TbBrain className="w-5 h-5 text-slate-500" />
+                      Working it out...
+                    </p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {(metadata?.keyFormulas ?? []).map((f: string) => (
-                      <div
-                        key={f}
-                        className="px-3 py-2 rounded-xl text-sm font-mono bg-gray-50 border border-gray-100 text-gray-700"
-                      >
-                        {f}
+                </div>
+              )}
+
+              {/* Solution Content */}
+              {(state === 'solving' || state === 'done') && solution && (
+                <div className="max-w-3xl">
+                  {/* Ink colored prose text */}
+                  <div className="prose prose-slate prose-p:text-slate-800 prose-headings:text-slate-900 max-w-none pb-6">
+                    <MathRenderer streaming={state === 'solving'}>
+                      {solution}
+                    </MathRenderer>
+                  </div>
+
+                  {/* Formulas (Styled as sticky notes) */}
+                  {state === 'done' && metadata?.keyFormulas && metadata.keyFormulas.length > 0 && (
+                    <motion.div
+                      className="mt-10 mb-6"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.3 }}
+                    >
+                      <div className="flex items-center gap-2 mb-4">
+                        <FiBookOpen className="w-4 h-4 text-slate-500" />
+                        <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">Important Formulas</span>
                       </div>
-                    ))}
+                      <div className="flex flex-wrap gap-3">
+                        {(metadata?.keyFormulas ?? []).map((f: string, i: number) => (
+                          <div
+                            key={f}
+                            className={`px-4 py-3 shadow-md border border-yellow-200 text-sm font-mono text-slate-800 bg-yellow-100/90 rounded-sm transform ${i % 2 === 0 ? '-rotate-1' : 'rotate-1'} flex items-center gap-2`}
+                          >
+                            <TbMathFunction className="w-4 h-4 text-yellow-600" />
+                            {f}
+                          </div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+
+                  {/* Grading / Feedback Footer */}
+                  {state === 'done' && (
+                    <motion.div
+                      className="mt-12 pt-6 border-t-2 border-dashed border-slate-300 flex items-center gap-4"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                    >
+                      <span className="text-sm font-serif italic text-slate-500">Did this solution help?</span>
+                      <button
+                        onClick={() => toast.success('Great! Glad it helped.')}
+                        className="p-2 hover:bg-green-100 rounded-full transition-colors border-2 border-transparent hover:border-green-300 group"
+                        title="Yes"
+                      >
+                        <FiSmile className="w-5 h-5 text-slate-400 group-hover:text-green-600 transition-colors" />
+                      </button>
+                      <button
+                        onClick={() => toast.success('Thanks for the feedback.')}
+                        className="p-2 hover:bg-red-100 rounded-full transition-colors border-2 border-transparent hover:border-red-300 group"
+                        title="No"
+                      >
+                        <FiFrown className="w-5 h-5 text-slate-400 group-hover:text-red-600 transition-colors" />
+                      </button>
+                    </motion.div>
+                  )}
+                </div>
+              )}
+
+              {/* Error State */}
+              {state === 'error' && !solution && (
+                <div className="flex flex-col items-center justify-center min-h-[50vh] text-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center border border-red-200">
+                    <FiXCircle className="w-8 h-8 text-red-500" />
                   </div>
-                </motion.div>
-              )}
-
-              {state === 'done' && (
-                <motion.div
-                  className="mt-6 flex items-center gap-4 pt-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <span className="text-sm text-gray-500">Was this helpful?</span>
+                  <div className="font-serif">
+                    <h3 className="font-semibold text-slate-800 mb-1">Calculation Error</h3>
+                    <p className="text-sm text-slate-500">Check your connection or question and try again.</p>
+                  </div>
                   <button
-                    onClick={() => toast.success('Great! Glad it helped.')}
-                    className="p-2 hover:bg-green-50 rounded-full transition-colors"
+                    onClick={handleNewQuestion}
+                    className="mt-2 text-sm text-slate-700 bg-white shadow-sm border border-slate-300 px-6 py-2 rounded-sm hover:bg-slate-50 transition-colors font-medium flex items-center gap-2"
                   >
-                    <FiSmile className="w-5 h-5 text-green-600" />
+                    <FiTrash2 className="w-4 h-4" />
+                    Erase and Retry
                   </button>
-                  <button
-                    onClick={() => toast.success('Thanks for the feedback.')}
-                    className="p-2 hover:bg-red-50 rounded-full transition-colors"
-                  >
-                    <FiFrown className="w-5 h-5 text-red-600" />
-                  </button>
-                </motion.div>
+                </div>
               )}
+              
             </div>
-          )}
-
-          {/* Error State */}
-          {state === 'error' && !solution && (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
-                <FiXCircle className="w-8 h-8 text-red-500" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 mb-1">Something went wrong</h3>
-                <p className="text-sm text-gray-500">Check your connection and try again</p>
-              </div>
-              <button
-                onClick={handleNewQuestion}
-                className="text-sm text-primary-600 border border-primary-200 px-5 py-2 rounded-xl hover:bg-primary-50 transition-colors"
-              >
-                Try again
-              </button>
-            </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
