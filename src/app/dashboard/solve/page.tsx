@@ -659,15 +659,39 @@ export default function SolvePage() {
         </div>
       </div>
 
-      {/* Solution Panel - FIXED: Dark text on white background */}
-      <div className="flex-1 flex flex-col bg-gray-100 lg:p-6 overflow-hidden">
-        <div className="flex-1 flex flex-col bg-white shadow-2xl lg:rounded-lg relative w-full max-w-4xl mx-auto overflow-hidden border border-gray-200">
+      {/* Solution Panel - NOTEBOOK STYLE */}
+      <div className="flex-1 flex flex-col bg-[#f5f0e8] lg:p-6 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-[#faf8f3] shadow-2xl lg:rounded-lg relative w-full max-w-4xl mx-auto overflow-hidden border border-[#d4c9b5]">
           
+          {/* Notebook paper texture overlay */}
+          <div 
+            className="absolute inset-0 z-0 pointer-events-none opacity-[0.03]"
+            style={{
+              backgroundImage: `repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 31px,
+                #8b7355 31px,
+                #8b7355 32px
+              )`,
+            }}
+          />
+          
+          {/* Red margin line */}
+          <div className="absolute left-[60px] top-0 bottom-0 w-[2px] bg-[#e8ddd0] z-0" />
+          
+          {/* Notebook holes effect on left */}
+          <div className="absolute left-4 top-0 bottom-0 w-8 flex flex-col justify-around py-8 z-0 opacity-30">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="w-5 h-5 rounded-full border-2 border-[#d4c9b5] bg-[#faf8f3]" />
+            ))}
+          </div>
+
           {/* Solution Header */}
-          <div className="relative z-10 px-6 lg:px-10 py-5 flex items-start justify-between border-b border-gray-200 bg-gradient-to-b from-gray-50 to-white">
+          <div className="relative z-10 px-6 lg:px-10 py-5 flex items-start justify-between border-b border-[#e8ddd0] bg-[#faf8f3]">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
-                <span className="text-gray-500 text-xs uppercase tracking-wider font-semibold">Subject:</span>
+                <span className="text-[#8b7355] text-xs uppercase tracking-wider font-semibold">Subject:</span>
                 <div className="font-semibold text-sm lg:text-base flex items-center gap-1.5 text-gray-900">
                   {(() => {
                     const Icon = activeSubject.icon
@@ -686,7 +710,7 @@ export default function SolvePage() {
               
               {state === 'done' && metadata?.topic && (
                 <div className="flex items-center gap-2">
-                  <span className="text-gray-500 text-xs uppercase tracking-wider font-semibold">Topic:</span>
+                  <span className="text-[#8b7355] text-xs uppercase tracking-wider font-semibold">Topic:</span>
                   <span className="text-gray-800 text-sm font-medium flex items-center gap-1.5">
                     <FiBook className="w-3.5 h-3.5 text-gray-400" />
                     {String(metadata.topic)}
@@ -697,19 +721,19 @@ export default function SolvePage() {
               <div className="text-sm text-gray-600 flex items-center gap-2 mt-1">
                 {state === 'solving' && (
                   <>
-                    <FiLoader className="w-3.5 h-3.5 animate-spin text-blue-500" />
+                    <FiLoader className="w-3.5 h-3.5 animate-spin text-[#8b7355]" />
                     <span>Solving your problem...</span>
                   </>
                 )}
                 {state === 'done' && (
                   <>
-                    <FiCheckCircle className="w-3.5 h-3.5 text-green-500" />
+                    <FiCheckCircle className="w-3.5 h-3.5 text-green-600" />
                     <span>Solution ready</span>
                   </>
                 )}
                 {state === 'idle' && (
                   <>
-                    <FiBookOpen className="w-3.5 h-3.5 text-gray-400" />
+                    <FiBookOpen className="w-3.5 h-3.5 text-[#8b7355]" />
                     <span>Ready to solve</span>
                   </>
                 )}
@@ -744,7 +768,7 @@ export default function SolvePage() {
                 {state === 'done' && (
                   <button
                     onClick={handleNewQuestion}
-                    className="text-sm text-gray-700 hover:text-gray-900 px-4 py-2 font-medium hover:bg-gray-100 rounded-lg transition-colors flex items-center gap-1.5 border border-gray-200"
+                    className="text-sm text-[#5c4d3c] hover:text-gray-900 px-4 py-2 font-medium hover:bg-[#f0ebe0] rounded-lg transition-colors flex items-center gap-1.5 border border-[#d4c9b5]"
                   >
                     New Question <FiChevronRight className="w-4 h-4" />
                   </button>
@@ -752,20 +776,31 @@ export default function SolvePage() {
               </div>
               
               {state === 'done' && metadata?.processingTimeMs && (
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-[#8b7355]">
                   Solved in {(metadata.processingTimeMs / 1000).toFixed(1)}s
                 </span>
               )}
             </div>
           </div>
 
-          {/* Solution Content - EXPLICIT DARK TEXT STYLING */}
+          {/* Solution Content - NOTEBOOK STYLE */}
           <div 
             ref={solutionRef} 
-            className="flex-1 overflow-y-auto px-6 lg:px-10 py-8 relative z-10 bg-white"
-            style={{ color: '#1f2937' }} // Explicit dark gray text color
+            className="flex-1 overflow-y-auto px-6 lg:px-10 py-8 relative z-10"
+            style={{ 
+              backgroundColor: '#faf8f3',
+              backgroundImage: `repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 31px,
+                #d4c9b5 31px,
+                #d4c9b5 32px
+              )`,
+              backgroundSize: '100% 32px',
+              lineHeight: '32px',
+            }}
           >
-            <div className="relative min-h-full max-w-3xl mx-auto">
+            <div className="relative min-h-full max-w-3xl mx-auto" style={{ paddingLeft: '20px' }}>
               
               {/* Idle State */}
               {state === 'idle' && (
@@ -773,27 +808,29 @@ export default function SolvePage() {
                   <motion.div
                     animate={{ y: [0, -8, 0] }}
                     transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-                    className="mb-6 text-gray-300"
+                    className="mb-6 text-[#d4c9b5]"
                   >
                     {(() => {
                       const Icon = activeSubject.icon
                       return <Icon className="w-20 h-20" />
                     })()}
                   </motion.div>
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-2">Ready to Help</h3>
-                  <p className="text-gray-600 max-w-md">
+                  <h3 className="text-2xl font-semibold text-gray-900 mb-2" style={{ fontFamily: 'Georgia, serif' }}>
+                    Ready to Help
+                  </h3>
+                  <p className="text-[#5c4d3c] max-w-md" style={{ fontFamily: 'Georgia, serif' }}>
                     Type your {activeSubject.label.toLowerCase()} question or upload a photo to get a detailed solution.
                   </p>
                   <div className="mt-8 grid grid-cols-2 gap-4 max-w-md">
-                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-left border border-blue-200">
+                    <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-4 text-left border border-[#d4c9b5]">
                       <FiCamera className="w-5 h-5 text-blue-500 mb-2" />
                       <p className="text-sm font-semibold text-gray-800">Upload Photo</p>
-                      <p className="text-xs text-gray-600 mt-1">Snap a pic of your problem</p>
+                      <p className="text-xs text-[#5c4d3c] mt-1">Snap a pic of your problem</p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-left border border-purple-200">
+                    <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-4 text-left border border-[#d4c9b5]">
                       <FiSend className="w-5 h-5 text-purple-500 mb-2" />
                       <p className="text-sm font-semibold text-gray-800">Type Question</p>
-                      <p className="text-xs text-gray-600 mt-1">Or write it out in words</p>
+                      <p className="text-xs text-[#5c4d3c] mt-1">Or write it out in words</p>
                     </div>
                   </div>
                 </div>
@@ -805,23 +842,145 @@ export default function SolvePage() {
                   <motion.div
                     animate={{ rotate: 360 }}
                     transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
-                    className="w-14 h-14 border-4 border-gray-200 border-t-blue-500 rounded-full"
+                    className="w-14 h-14 border-4 border-[#d4c9b5] border-t-[#8b7355] rounded-full"
                   />
                   <div className="text-center">
-                    <p className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2 justify-center">
-                      <TbBrain className="w-5 h-5 text-blue-500" />
+                    <p className="text-lg font-semibold text-gray-800 mb-1 flex items-center gap-2 justify-center" style={{ fontFamily: 'Georgia, serif' }}>
+                      <TbBrain className="w-5 h-5 text-[#8b7355]" />
                       Thinking...
                     </p>
-                    <p className="text-sm text-gray-600">Analyzing your {activeSubject.label.toLowerCase()} problem</p>
+                    <p className="text-sm text-[#5c4d3c]" style={{ fontFamily: 'Georgia, serif' }}>
+                      Analyzing your {activeSubject.label.toLowerCase()} problem
+                    </p>
                   </div>
                 </div>
               )}
 
-              {/* Solution Content - FIXED: Dark text with explicit styling */}
+              {/* Solution Content - NOTEBOOK TEXT */}
               {(state === 'solving' || state === 'done') && solution && (
-                <div className="text-gray-900">
-                  {/* Solution Text - Explicit dark text styling */}
-                  <div className="text-gray-900 leading-relaxed text-base lg:text-lg">
+                <div>
+                  {/* Solution Text - Handwritten notebook style */}
+                  <div 
+                    className="solution-content text-gray-900"
+                    style={{ 
+                      fontFamily: "'Segoe UI', system-ui, -apple-system, sans-serif",
+                      fontSize: '16px',
+                      fontWeight: 400,
+                      lineHeight: '32px',
+                      color: '#1a1a1a',
+                    }}
+                  >
+                    <style jsx>{`
+                      .solution-content {
+                        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+                        font-size: 16px !important;
+                        font-weight: 400 !important;
+                        line-height: 32px !important;
+                        color: #1a1a1a !important;
+                      }
+                      .solution-content * {
+                        color: #1a1a1a !important;
+                        line-height: 32px !important;
+                      }
+                      .solution-content h1, 
+                      .solution-content h2, 
+                      .solution-content h3, 
+                      .solution-content h4 {
+                        color: #000000 !important;
+                        font-weight: 600 !important;
+                        margin-top: 32px !important;
+                        margin-bottom: 16px !important;
+                        font-family: 'Georgia', serif !important;
+                      }
+                      .solution-content h2 {
+                        font-size: 20px !important;
+                        border-bottom: 2px solid #d4c9b5 !important;
+                        padding-bottom: 8px !important;
+                      }
+                      .solution-content h3 {
+                        font-size: 18px !important;
+                      }
+                      .solution-content strong, 
+                      .solution-content b {
+                        color: #000000 !important;
+                        font-weight: 600 !important;
+                      }
+                      .solution-content em, 
+                      .solution-content i {
+                        color: #4a3728 !important;
+                      }
+                      .solution-content p {
+                        margin-bottom: 16px !important;
+                      }
+                      .solution-content ul, 
+                      .solution-content ol {
+                        margin-left: 24px !important;
+                        margin-bottom: 16px !important;
+                      }
+                      .solution-content li {
+                        margin-bottom: 8px !important;
+                        line-height: 32px !important;
+                      }
+                      .solution-content code {
+                        background: #f0ebe0 !important;
+                        color: #4a3728 !important;
+                        padding: 2px 8px !important;
+                        border-radius: 3px !important;
+                        font-size: 0.9em !important;
+                        font-family: 'Consolas', 'Monaco', monospace !important;
+                        border: 1px solid #d4c9b5 !important;
+                      }
+                      .solution-content pre {
+                        background: #f5f0e8 !important;
+                        border: 1px solid #d4c9b5 !important;
+                        border-radius: 6px !important;
+                        padding: 16px !important;
+                        margin: 16px 0 !important;
+                        overflow-x: auto !important;
+                      }
+                      .solution-content pre code {
+                        background: transparent !important;
+                        border: none !important;
+                        padding: 0 !important;
+                      }
+                      .solution-content blockquote {
+                        border-left: 3px solid #8b7355 !important;
+                        padding-left: 16px !important;
+                        margin: 16px 0 !important;
+                        color: #5c4d3c !important;
+                        font-style: italic !important;
+                      }
+                      .solution-content a {
+                        color: #8b7355 !important;
+                        text-decoration: underline !important;
+                      }
+                      .solution-content table {
+                        border-collapse: collapse !important;
+                        width: 100% !important;
+                        margin: 16px 0 !important;
+                      }
+                      .solution-content th,
+                      .solution-content td {
+                        border: 1px solid #d4c9b5 !important;
+                        padding: 8px 12px !important;
+                        text-align: left !important;
+                      }
+                      .solution-content th {
+                        background: #f0ebe0 !important;
+                        font-weight: 600 !important;
+                      }
+                      /* Math formulas should stand out */
+                      .solution-content .katex,
+                      .solution-content .katex * {
+                        font-family: 'KaTeX_Main', 'Times New Roman', serif !important;
+                      }
+                      .solution-content .katex-display {
+                        margin: 16px 0 !important;
+                        padding: 8px 0 !important;
+                        background: rgba(139, 115, 85, 0.05) !important;
+                        border-radius: 4px !important;
+                      }
+                    `}</style>
                     <MathRenderer streaming={state === 'solving'}>
                       {solution}
                     </MathRenderer>
@@ -836,16 +995,18 @@ export default function SolvePage() {
                       transition={{ delay: 0.3 }}
                     >
                       <div className="flex items-center gap-3 mb-4">
-                        <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-                        <span className="text-sm font-semibold text-gray-700 uppercase tracking-wider">Key Formulas</span>
+                        <div className="w-1 h-6 bg-[#8b7355] rounded-full"></div>
+                        <span className="text-sm font-semibold text-[#5c4d3c] uppercase tracking-wider" style={{ fontFamily: 'Georgia, serif' }}>
+                          Key Formulas
+                        </span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {(metadata?.keyFormulas ?? []).map((f: string, i: number) => (
                           <div
                             key={i}
-                            className="px-4 py-3 bg-blue-50 border border-blue-200 rounded-lg text-sm font-medium text-gray-800 flex items-center gap-3 hover:bg-blue-100 transition-colors"
+                            className="px-4 py-3 bg-[#f5f0e8] border border-[#d4c9b5] rounded-lg text-sm font-medium text-gray-800 flex items-center gap-3 hover:bg-[#f0ebe0] transition-colors"
                           >
-                            <TbMathFunction className="w-4 h-4 text-blue-500 flex-shrink-0" />
+                            <TbMathFunction className="w-4 h-4 text-[#8b7355] flex-shrink-0" />
                             <span>{f}</span>
                           </div>
                         ))}
@@ -856,26 +1017,28 @@ export default function SolvePage() {
                   {/* Feedback Section */}
                   {state === 'done' && (
                     <motion.div
-                      className="mt-12 pt-6 border-t border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                      className="mt-12 pt-6 border-t border-[#d4c9b5] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: 0.6 }}
                     >
-                      <span className="text-sm text-gray-700 font-medium">Was this solution helpful?</span>
+                      <span className="text-sm text-[#5c4d3c] font-medium" style={{ fontFamily: 'Georgia, serif' }}>
+                        Was this solution helpful?
+                      </span>
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => toast.success('Great! Glad it helped.')}
-                          className="p-2.5 hover:bg-green-50 rounded-lg transition-colors border border-gray-200 hover:border-green-300 group"
+                          className="p-2.5 hover:bg-green-50 rounded-lg transition-colors border border-[#d4c9b5] hover:border-green-300 group"
                           title="Yes, helpful"
                         >
-                          <FiSmile className="w-5 h-5 text-gray-400 group-hover:text-green-500 transition-colors" />
+                          <FiSmile className="w-5 h-5 text-[#8b7355] group-hover:text-green-500 transition-colors" />
                         </button>
                         <button
                           onClick={() => toast.success("Thanks for the feedback. We'll improve.")}
-                          className="p-2.5 hover:bg-red-50 rounded-lg transition-colors border border-gray-200 hover:border-red-300 group"
+                          className="p-2.5 hover:bg-red-50 rounded-lg transition-colors border border-[#d4c9b5] hover:border-red-300 group"
                           title="No, not helpful"
                         >
-                          <FiFrown className="w-5 h-5 text-gray-400 group-hover:text-red-500 transition-colors" />
+                          <FiFrown className="w-5 h-5 text-[#8b7355] group-hover:text-red-500 transition-colors" />
                         </button>
                       </div>
                     </motion.div>
@@ -890,12 +1053,16 @@ export default function SolvePage() {
                     <FiXCircle className="w-8 h-8 text-red-500" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900 mb-1">Something went wrong</h3>
-                    <p className="text-sm text-gray-600">Please check your connection or try rephrasing your question.</p>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1" style={{ fontFamily: 'Georgia, serif' }}>
+                      Something went wrong
+                    </h3>
+                    <p className="text-sm text-[#5c4d3c]" style={{ fontFamily: 'Georgia, serif' }}>
+                      Please check your connection or try rephrasing your question.
+                    </p>
                   </div>
                   <button
                     onClick={handleNewQuestion}
-                    className="mt-2 text-sm font-medium text-gray-700 bg-white shadow-sm border border-gray-300 px-6 py-2.5 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+                    className="mt-2 text-sm font-medium text-[#5c4d3c] bg-[#faf8f3] shadow-sm border border-[#d4c9b5] px-6 py-2.5 rounded-lg hover:bg-[#f0ebe0] transition-colors flex items-center gap-2"
                   >
                     <FiTrash2 className="w-4 h-4" />
                     Clear and try again
