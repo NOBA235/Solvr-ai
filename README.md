@@ -1,141 +1,111 @@
-# 🔬 Solvr AI — Production SaaS Starter
+# 🔬 Solvr AI
 
-AI-powered STEM problem solver + virtual lab platform. Students upload or type any Physics, Maths, Chemistry, or Biology problem and receive streaming, step-by-step solutions from Claude AI.
+**AI-powered STEM tutor for students aged 13 and above.**
+
+Type or photograph any Physics, Mathematics, Chemistry, or Biology problem and get a complete step-by-step solution in seconds — with beautiful equation rendering, curriculum alignment, and a virtual interactive lab.
+
+> Built from Nagaland, India 🇮🇳 — making quality STEM education accessible everywhere.
 
 ---
 
-## Subscription Plans
+## What it does
 
-| Feature | Free | Basic ($9/mo) | Premium ($19/mo) |
-|---------|------|---------------|------------------|
-| Problems/month | 5 | 150 | Unlimited |
-| Text input | ✓ | ✓ | ✓ |
-| Photo upload | — | ✓ | ✓ |
-| PDF upload | — | — | ✓ |
-| Virtual Labs | — | ✓ | ✓ |
-| History | 3 days | 90 days | Unlimited |
-| Priority AI | — | — | ✓ |
-| Export PDF | — | — | ✓ |
-| 7-day free trial | — | ✓ | ✓ |
+Students type a question or upload a photo of their homework. Solvr AI:
+
+1. Searches a curated knowledge base of NCERT, OpenStax, and other textbooks for relevant content
+2. Sends that context along with the question to Claude AI
+3. Streams a structured solution back in real time with every step shown
+4. Renders all equations using KaTeX — properly typeset maths, not plain text
+
+The free plan gives 5 problems per month with no credit card. Paid plans unlock photo upload, virtual labs, and unlimited problems.
+
+---
+
+## Live Demo
+
+→ **[solvr.ai](https://solvr.ai)** *(coming soon)*
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Framework | Next.js 14 App Router + TypeScript | SSR for SEO, API routes, type safety |
-| Auth + DB + Storage | Supabase (Postgres + GoTrue + S3) | Eliminates custom auth, RLS security |
-| AI | Anthropic Claude (streaming) | Best-in-class reasoning, vision support |
-| Payments | Stripe | Industry standard, webhook reliability |
-| Email | Resend | Developer-friendly transactional email |
-| Styling | Tailwind CSS + Framer Motion | Rapid UI, smooth animations |
-| Deployment | Vercel + Supabase Cloud | Zero-config, auto-scaling |
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 14 (App Router) + TypeScript |
+| Styling | Tailwind CSS + Framer Motion |
+| Math rendering | KaTeX via rehype-katex |
+| Auth + Database | Supabase (PostgreSQL + GoTrue) |
+| Vector search | Supabase pgvector |
+| AI — solutions | Anthropic Claude (claude-sonnet-4) |
+| AI — embeddings | OpenAI text-embedding-3-small |
+| Payments | Stripe |
+| Email | Resend |
+| Deployment | Vercel |
 
 ---
 
-## Project Structure
+## Features
 
-```
-solvr/
-├── middleware.ts                    # Auth + rate limiting + plan gates
-├── vercel.json                      # Cron job config
-├── supabase/migrations/
-│   └── 001_initial.sql             # Full schema, RLS, functions, storage
-│
-└── src/
-    ├── app/
-    │   ├── page.tsx                 # Landing page
-    │   ├── pricing/page.tsx         # Pricing with billing toggle
-    │   ├── auth/login|register/     # Auth pages (+ Google OAuth)
-    │   ├── auth/callback/route.ts   # OAuth redirect handler
-    │   ├── dashboard/
-    │   │   ├── layout.tsx           # Protected layout + sidebar
-    │   │   ├── page.tsx             # Dashboard home + usage stats
-    │   │   ├── solve/page.tsx       # ← CORE FEATURE: streaming solver
-    │   │   ├── history/page.tsx     # Past solutions + bookmarks
-    │   │   ├── lab/page.tsx         # Subject hub
-    │   │   ├── lab/[subject]/       # Virtual lab (chemistry/physics/maths/bio)
-    │   │   └── settings/page.tsx    # Subscription management
-    │   └── api/
-    │       ├── solve/route.ts       # Streaming Claude solver (auth + quota + rate limit)
-    │       ├── lab/react/route.ts   # Virtual lab AI endpoint
-    │       ├── subscriptions/
-    │       │   ├── create/route.ts  # Stripe Checkout (idempotent)
-    │       │   └── portal/route.ts  # Stripe Customer Portal
-    │       ├── webhooks/stripe/     # Webhook handler (signature verified)
-    │       └── cron/reset-usage/    # Monthly usage reset
-    │
-    ├── lib/
-    │   ├── api-guard.ts             # Auth + quota + rate limit in one call
-    │   ├── rate-limit/index.ts      # Sliding window rate limiter
-    │   ├── validate/index.ts        # Input sanitisation + validation
-    │   ├── email.ts                 # Resend transactional emails
-    │   ├── anthropic/solver.ts      # Claude streaming solver
-    │   ├── stripe/plans.ts          # Plan config (single source of truth)
-    │   └── supabase/client|server   # Browser + server Supabase clients
-    └── types/index.ts               # Shared TypeScript types
-```
+- **AI Problem Solver** — streams step-by-step solutions with KaTeX math rendering
+- **Photo Upload** — photograph textbook problems, Claude reads and solves them
+- **RAG Knowledge Base** — answers grounded in NCERT, CBSE, IGCSE, AP, IB content
+- **Curriculum Selector** — NCERT / CBSE / JEE / IGCSE / AP / IB alignment
+- **Virtual Labs** — interactive Chemistry, Physics, Mathematics, Biology simulations
+- **Solution History** — searchable, filterable, bookmarkable past solutions
+- **Subscription Plans** — Free / Basic ($9/mo) / Premium ($19/mo)
+- **Admin Panel** — knowledge base stats and retrieval quality tester
 
 ---
 
-## Setup
+## Quick Start
 
-### 1. Prerequisites
+### Prerequisites
 
 - Node.js 18+
-- A [Supabase](https://supabase.com) project (free tier works)
-- An [Anthropic](https://console.anthropic.com) API key
-- A [Stripe](https://stripe.com) account
-- A [Resend](https://resend.com) account (free tier works)
+- [Supabase](https://supabase.com) project
+- [Anthropic](https://console.anthropic.com) API key
+- [OpenAI](https://platform.openai.com) API key (for RAG embeddings)
 
-### 2. Install
-
-```bash
-unzip solvr.zip && cd solvr
-npm install
-```
-
-### 3. Supabase Setup
+### Install
 
 ```bash
-# Install Supabase CLI
-npm install -g supabase
-
-# Login and link to your project
-supabase login
-supabase link --project-ref your-project-ref
-
-# Run migrations (creates all tables, RLS, functions, storage)
-supabase db push
-
-# Enable Google OAuth (optional but recommended)
-# Supabase dashboard → Auth → Providers → Google
+git clone https://github.com/yourusername/solvr-ai.git
+cd solvr-ai
+npm install --legacy-peer-deps
 ```
 
-### 4. Stripe Setup
-
-In the Stripe dashboard:
-1. Create two products: **Basic** and **Premium**
-2. Add monthly and yearly prices to each
-3. Copy the Price IDs into your `.env`
-4. Set up the webhook endpoint: `https://yourdomain.com/api/webhooks/stripe`
-5. Subscribe to these events:
-   - `customer.subscription.created`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-   - `invoice.payment_failed`
-   - `invoice.payment_succeeded`
-
-### 5. Configure Environment
+### Configure
 
 ```bash
 cp .env.example .env.local
 ```
 
-Fill in all values in `.env.local`. **Never commit this file.**
+Minimum required variables:
 
-### 6. Run
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+ANTHROPIC_API_KEY=sk-ant-xxxx
+OPENAI_API_KEY=sk-xxxx
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+CRON_SECRET=any_random_string
+```
+
+### Set up database
+
+```bash
+# Install Supabase CLI
+scoop install supabase   # Windows
+brew install supabase/tap/supabase  # macOS
+
+# Link and push migrations
+supabase login
+supabase link --project-ref YOUR_PROJECT_REF
+supabase db push
+```
+
+### Run
 
 ```bash
 npm run dev
@@ -144,107 +114,190 @@ npm run dev
 
 ---
 
-## Deployment (Vercel)
+## Loading RAG Content
+
+The formula sheets and worked examples are included and ready to ingest immediately:
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
+npm run ingest
+```
 
-# Deploy
+For full textbook coverage, download NCERT PDFs from [ncert.nic.in](https://ncert.nic.in/textbook.php) into `textbooks/ncert/` then run:
+
+```bash
+npm run ingest:physics
+npm run ingest:maths
+npm run ingest:chem
+npm run ingest:bio
+```
+
+Check what is loaded:
+```bash
+npm run ingest:stats
+```
+
+---
+
+## Project Structure
+
+```
+solvr/
+├── src/
+│   ├── app/
+│   │   ├── page.tsx                 Landing page
+│   │   ├── dashboard/
+│   │   │   ├── solve/               Problem solver (main feature)
+│   │   │   ├── lab/[subject]/       Virtual labs
+│   │   │   ├── history/             Solution history
+│   │   │   ├── settings/            Subscription management
+│   │   │   └── admin/               Knowledge base admin
+│   │   └── api/
+│   │       ├── solve/               Streaming AI solver
+│   │       ├── lab/react/           Virtual lab AI
+│   │       ├── subscriptions/       Stripe Checkout + Portal
+│   │       └── webhooks/stripe/     Payment events
+│   ├── components/
+│   │   ├── MathRenderer.tsx         KaTeX equation rendering
+│   │   ├── CurriculumSelector.tsx   Curriculum preference
+│   │   └── landing/DemoSolver.tsx   Landing page demo widget
+│   └── lib/
+│       ├── anthropic/solver.ts      RAG-enhanced Claude solver
+│       ├── anthropic/rag.ts         pgvector retrieval
+│       ├── api-guard.ts             Auth + rate limit + quota
+│       ├── rate-limit/              Sliding window rate limiter
+│       ├── validate/                Input validation
+│       └── stripe/plans.ts          Subscription plan config
+├── supabase/migrations/
+│   ├── 001_initial.sql              Core schema + RLS
+│   └── 002_rag_knowledge_base.sql   pgvector knowledge base
+├── scripts/
+│   └── ingest.ts                    Textbook ingestion pipeline
+├── textbooks/
+│   ├── formulas/                    Formula reference sheets
+│   └── worked-examples/             Worked problem sets
+└── docs/
+    └── DOCUMENTATION.md             Full technical documentation
+```
+
+---
+
+## Scripts
+
+```bash
+npm run dev              # Start development server
+npm run build            # Production build
+npm run type-check       # TypeScript validation
+
+npm run ingest           # Ingest all available content
+npm run ingest:stats     # Show knowledge base statistics
+npm run ingest:physics   # Ingest physics content only
+npm run ingest:maths     # Ingest mathematics content only
+npm run ingest:chem      # Ingest chemistry content only
+npm run ingest:bio       # Ingest biology content only
+```
+
+---
+
+## Subscription Plans
+
+| | Free | Basic | Premium |
+|--|------|-------|---------|
+| Price | $0 | $9/mo | $19/mo |
+| Problems/month | 5 | 150 | Unlimited |
+| Photo upload | — | ✓ | ✓ |
+| PDF upload | — | — | ✓ |
+| Virtual Labs | — | ✓ | ✓ |
+| History | 3 days | 90 days | Unlimited |
+| Free trial | — | 7 days | 7 days |
+
+Annual plans save approximately 30%.
+
+---
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Server only — bypasses RLS |
+| `ANTHROPIC_API_KEY` | Yes | Claude API key — server only |
+| `OPENAI_API_KEY` | Yes | Embeddings for RAG — server only |
+| `NEXT_PUBLIC_APP_URL` | Yes | App base URL |
+| `CRON_SECRET` | Yes | Protects cron endpoints |
+| `STRIPE_SECRET_KEY` | Payments | Server only |
+| `STRIPE_WEBHOOK_SECRET` | Payments | Webhook signing secret |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Payments | Client-safe key |
+| `STRIPE_BASIC_MONTHLY_PRICE_ID` | Payments | Stripe price ID |
+| `STRIPE_BASIC_YEARLY_PRICE_ID` | Payments | Stripe price ID |
+| `STRIPE_PREMIUM_MONTHLY_PRICE_ID` | Payments | Stripe price ID |
+| `STRIPE_PREMIUM_YEARLY_PRICE_ID` | Payments | Stripe price ID |
+| `RESEND_API_KEY` | Email | Transactional email |
+
+---
+
+## Deployment
+
+### Vercel
+
+```bash
+npm install -g vercel
 vercel
+```
 
-# Set all env vars in Vercel dashboard:
-# Project → Settings → Environment Variables
-# (copy from .env.example)
+Add all environment variables in Vercel dashboard under **Project → Settings → Environment Variables**.
 
-# The cron job in vercel.json runs automatically on Vercel Pro/Enterprise
-# For free tier, use an external cron (GitHub Actions, cron-job.org)
+The `vercel.json` cron job resets monthly usage counters on the 1st of each month automatically.
+
+### Stripe Webhooks
+
+Point `https://yourdomain.com/api/webhooks/stripe` to these events:
+- `customer.subscription.created`
+- `customer.subscription.updated`
+- `customer.subscription.deleted`
+- `invoice.payment_failed`
+- `invoice.payment_succeeded`
+
+### Supabase Auth
+
+Add your production domain to **Authentication → URL Configuration → Redirect URLs**:
+```
+https://yourdomain.com/**
 ```
 
 ---
 
-## Security Architecture
+## Security
 
-### Authentication
-- **Supabase GoTrue** handles all auth (JWT, session refresh, OAuth)
-- Middleware uses `getUser()` (cryptographically verified) — never `getSession()`
-- Sessions stored in HTTP-only cookies (not localStorage)
-- Google OAuth supported out of the box
+- JWT verification via `supabase.auth.getUser()` on every protected route
+- Row Level Security on every database table
+- Stripe webhook signature verification before any database write
+- Rate limiting per user and per IP for auth endpoints
+- Input validation and sanitisation on all API surfaces
+- 7 HTTP security headers — CSP, HSTS, X-Frame-Options, and more
+- Atomic usage counters via PostgreSQL RPC functions
+- No secrets in client bundle — all sensitive keys are server-only
 
-### API Security
-
-Every protected API route goes through `apiGuard()` which enforces:
-
-```
-Request → Verify Supabase JWT → Fetch profile → Rate limit check → Plan feature gate → Quota check → Handler
-```
-
-| Layer | Protection |
-|-------|-----------|
-| Auth | Supabase JWT on every request |
-| Rate limiting | Sliding window per user (5–60 req/min by plan) |
-| Auth brute force | 10 attempts per 15 min per IP |
-| Input validation | All inputs validated before DB/AI access |
-| File validation | MIME type + size checked before Claude |
-| Plan gates | Feature access checked server-side |
-| Monthly quota | Atomic DB counter (prevents race conditions) |
-
-### Payment Security
-
-| Concern | Solution |
-|---------|---------|
-| Webhook forgery | Stripe signature verified before any DB write |
-| Duplicate charges | Idempotency keys on checkout creation |
-| Plan state | Always synced from Stripe webhook, not client |
-| Secret keys | STRIPE_SECRET_KEY server-only, never in client bundle |
-| Downgrade | Handled by Stripe webhook on subscription deletion |
-
-### Database Security
-
-- **Row Level Security (RLS)** on every table — users can only access their own data
-- **Service role client** used only in webhook handler (bypasses RLS intentionally)
-- **Parameterised queries** via Supabase client (no SQL injection)
-- **Atomic counters** via RPC functions (no race conditions on usage tracking)
-
-### HTTP Security Headers
-
-Applied to all routes via `next.config.ts`:
-
-```
-X-Frame-Options: DENY                     (clickjacking)
-X-Content-Type-Options: nosniff           (MIME sniffing)
-Strict-Transport-Security: max-age=63072000  (HTTPS only)
-Content-Security-Policy: ...              (XSS)
-Permissions-Policy: ...                   (browser feature lockdown)
-Referrer-Policy: strict-origin-when-cross-origin
-```
-
-### What to Add Before Launch
-
-- [ ] **Sentry** for error monitoring: `npm i @sentry/nextjs`
-- [ ] **PostHog** for analytics: `npm i posthog-js`
-- [ ] **Upstash Redis** for rate limiting (replaces in-memory Map for multi-instance): `npm i @upstash/ratelimit @upstash/redis`
-- [ ] **PDF export** for Premium users (jsPDF or Puppeteer)
-- [ ] Email verification on signup (enable in Supabase Auth settings)
-- [ ] CAPTCHA on auth forms (hCaptcha or Cloudflare Turnstile)
-- [ ] Penetration test before large-scale launch
+See [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md) for the full security architecture.
 
 ---
 
-## Performance Notes
+## Documentation
 
-- **Streaming**: AI responses stream token-by-token — users see output immediately, no waiting for full solution
-- **Server Components**: Dashboard, history, and settings pages fetch data server-side (no client-side loading states)
-- **Lazy loading**: Lab client loaded only when user navigates to lab route
-- **No-cache**: All `/dashboard` and `/api` routes are `Cache-Control: no-store`
-- **Static**: Landing page and pricing are fully static (ISR-compatible)
+Full technical documentation including architecture diagrams, API reference, database schema, security design, and RAG system details:
+
+→ [docs/DOCUMENTATION.md](docs/DOCUMENTATION.md)
 
 ---
 
-## API Rate Limits by Plan
+## Acknowledgements
 
-| Plan | Requests/min | Auth attempts/15min | File uploads/hr |
-|------|-------------|--------------------|-----------------| 
-| Free | 5 | 10 (per IP) | 30 |
-| Basic | 20 | 10 (per IP) | 30 |
-| Premium | 60 | 10 (per IP) | 30 |
+- [Anthropic](https://anthropic.com) — Claude AI
+- [Supabase](https://supabase.com) — Database and auth infrastructure
+- [NCERT](https://ncert.nic.in) — Free, openly licensed educational content
+- [OpenStax](https://openstax.org) — CC-licensed college textbooks
+- [KaTeX](https://katex.org) — Fast math rendering
+
+---
+
+*Built with ❤️ from Nagaland, India*
