@@ -1,10 +1,9 @@
-// ============================================================
+
 //  API Guard — wraps every protected route with:
 //   1. Supabase session verification
 //   2. Plan limit enforcement
 //   3. Per-user rate limiting
-//   4. Standardised error responses
-// ============================================================
+//   4. Standardised error response
 
 import { createClient } from '@/lib/supabase/server'
 import { rateLimit, API_RATE_LIMITS } from '@/lib/rate-limit'
@@ -35,7 +34,8 @@ export async function apiGuard(opts: GuardOptions = {}): Promise<GuardResult | N
     return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
   }
 
-  // ── 2. Fetch profile (plan, usage) ────────────────────────────────────────
+  // ── 2. Fetch profile (plan, usage)
+ /* 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('*')
@@ -44,7 +44,27 @@ export async function apiGuard(opts: GuardOptions = {}): Promise<GuardResult | N
 
   if (profileError || !profile) {
     return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
-  }
+  }*/
+ const { data: profile, error: profileError } = await supabase
+  .from('profiles')
+  .select('*')
+  .eq('id', user.id)
+  .single()
+
+console.log('USER ID:', user.id)
+console.log('PROFILE:', profile)
+console.log('PROFILE ERROR:', profileError)
+
+if (profileError || !profile) {
+  return NextResponse.json(
+    {
+      error: 'Profile not found',
+      details: profileError,
+      userId: user.id,
+    },
+    { status: 404 }
+  )
+}
 
   // ── 3. Rate limiting (per user per plan tier) ─────────────────────────────
   const rateCfg = API_RATE_LIMITS[profile.plan] ?? API_RATE_LIMITS.free
